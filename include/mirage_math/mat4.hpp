@@ -11,7 +11,8 @@ public:
 
   template<typename T>
     requires( IsSame<T, float> )
-  Mat4( T t00, T t01, T t02, T t03, T t10, T t11, T t12, T t13, T t20, T t21, T t22, T t23, T t30, T t31, T t32, T t33 )
+  constexpr Mat4(
+    T t00, T t01, T t02, T t03, T t10, T t11, T t12, T t13, T t20, T t21, T t22, T t23, T t30, T t31, T t32, T t33 )
   {
     ( *this )( 0, 0 ) = t00;
     ( *this )( 1, 0 ) = t10;
@@ -31,7 +32,7 @@ public:
     ( *this )( 3, 3 ) = t33;
   }
 
-  Mat4( const Vec4& v00, const Vec4& v01, const Vec4& v02, const Vec4& v03 )
+  constexpr Mat4( const Vec4& v00, const Vec4& v01, const Vec4& v02, const Vec4& v03 )
   {
     ( *this )[0] = v00;
     ( *this )[1] = v01;
@@ -39,20 +40,20 @@ public:
     ( *this )[3] = v03;
   }
 
-  Mat4( const Mat& other ) : Mat( other ) {}
+  constexpr Mat4( const Mat& other ) : Mat( other ) {}
 };
 
-inline Mat4 inverse( const Mat4& mat )
+[[nodiscard]] constexpr Mat4 inverse( const Mat4& mat )
 {
-  const auto& a = reinterpret_cast<const Vec3&>( mat[0] );
-  const auto& b = reinterpret_cast<const Vec3&>( mat[1] );
-  const auto& c = reinterpret_cast<const Vec3&>( mat[2] );
-  const auto& d = reinterpret_cast<const Vec3&>( mat[3] );
+  const Vec3 a = mat[0].toSubVec<3>();
+  const Vec3 b = mat[1].toSubVec<3>();
+  const Vec3 c = mat[2].toSubVec<3>();
+  const Vec3 d = mat[3].toSubVec<3>();
 
-  const auto& x = mat( 3, 0 );
-  const auto& y = mat( 3, 1 );
-  const auto& z = mat( 3, 2 );
-  const auto& w = mat( 3, 3 );
+  const float x = mat( 3, 0 );
+  const float y = mat( 3, 1 );
+  const float z = mat( 3, 2 );
+  const float w = mat( 3, 3 );
 
   auto s = cross( a, b );
   auto t = cross( c, d );

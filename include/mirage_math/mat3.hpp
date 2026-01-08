@@ -10,7 +10,7 @@ public:
 
   template<typename T>
     requires( IsSame<T, float> )
-  Mat3( T n00, T n01, T n02, T n10, T n11, T n12, T n20, T n21, T n22 )
+  constexpr Mat3( T n00, T n01, T n02, T n10, T n11, T n12, T n20, T n21, T n22 )
   {
     ( *this )( 0, 0 ) = n00;
     ( *this )( 1, 0 ) = n10;
@@ -23,24 +23,24 @@ public:
     ( *this )( 2, 2 ) = n22;
   }
 
-  Mat3( const Vec3& v00, const Vec3& v01, const Vec3& v02 )
+  constexpr Mat3( const Vec3& v00, const Vec3& v01, const Vec3& v02 )
   {
     ( *this )[0] = v00;
     ( *this )[1] = v01;
     ( *this )[2] = v02;
   }
 
-  Mat3( const Mat& other ) : Mat( other ) {}
+  constexpr Mat3( const Mat& other ) : Mat( other ) {}
 };
 
-inline float determinant( const Mat3& mat )
+[[nodiscard]] constexpr float determinant( const Mat3& mat )
 {
   return mat( 0, 0 ) * ( mat( 1, 1 ) * mat( 2, 2 ) - mat( 2, 1 ) * mat( 1, 2 ) )
          - mat( 0, 1 ) * ( mat( 1, 0 ) * mat( 2, 2 ) - mat( 1, 2 ) * mat( 2, 0 ) )
          + mat( 0, 2 ) * ( mat( 1, 0 ) * mat( 2, 1 ) - mat( 1, 1 ) * mat( 2, 0 ) );
 }
 
-inline Mat3 inverse( const Mat3& mat )
+[[nodiscard]] constexpr Mat3 inverse( const Mat3& mat )
 {
   const auto& a = mat[0];
   const auto& b = mat[1];
@@ -55,7 +55,7 @@ inline Mat3 inverse( const Mat3& mat )
   return Mat3{ b_cross_c, c_cross_a, a_cross_b } / scalar_cross;
 }
 
-inline Mat3 makeRotationX( float t )
+[[nodiscard]] inline Mat3 makeRotationX( float t )
 {
   auto c = std::cos( t );
   auto s = std::sin( t );
@@ -63,7 +63,7 @@ inline Mat3 makeRotationX( float t )
   return Mat3{ 1.0F, 0.0F, 0.0F, 0.0F, c, -s, 0.0F, s, c };
 }
 
-inline Mat3 makeRotationY( float t )
+[[nodiscard]] inline Mat3 makeRotationY( float t )
 {
   auto c = std::cos( t );
   auto s = std::sin( t );
@@ -71,7 +71,7 @@ inline Mat3 makeRotationY( float t )
   return Mat3{ c, 0.0F, s, 0.0F, 1.0F, 0.0F, -s, 0.0F, c };
 }
 
-inline Mat3 makeRotationZ( float t )
+[[nodiscard]] inline Mat3 makeRotationZ( float t )
 {
   auto c = std::cos( t );
   auto s = std::sin( t );
@@ -79,7 +79,7 @@ inline Mat3 makeRotationZ( float t )
   return Mat3{ c, -s, 0.0F, s, c, 0.0F, 0.0F, 0.0F, 1.0F };
 }
 
-inline Mat3 makeRotation( float t, const Vec3& a )
+[[nodiscard]] inline Mat3 makeRotation( float t, const Vec3& a )
 {
   auto c           = std::cos( t );
   auto s           = std::sin( t );
@@ -104,7 +104,7 @@ inline Mat3 makeRotation( float t, const Vec3& a )
     c + z * a.z() };
 }
 
-inline Mat3 makeReflection( const Vec3& a )
+[[nodiscard]] constexpr Mat3 makeReflection( const Vec3& a )
 {
   auto x = -2.0F * a.x();
   auto y = -2.0F * a.y();
@@ -117,11 +117,14 @@ inline Mat3 makeReflection( const Vec3& a )
   return Mat3{ 1.0F + x * a.x(), axay, axaz, axay, 1.0F + y * a.y(), ayaz, axaz, ayaz, 1.0F + z * a.z() };
 }
 
-inline Mat3 makeInvolution( const Vec3& a ) { return -makeReflection( a ); }
+[[nodiscard]] constexpr Mat3 makeInvolution( const Vec3& a ) { return -makeReflection( a ); }
 
-inline Mat3 makeScale( float sx, float sy, float sz ) { return Mat3{ sx, 0.0F, 0.0F, 0.0F, sy, 0.0F, 0.0F, 0.0F, sz }; }
+[[nodiscard]] constexpr Mat3 makeScale( float sx, float sy, float sz )
+{
+  return Mat3{ sx, 0.0F, 0.0F, 0.0F, sy, 0.0F, 0.0F, 0.0F, sz };
+}
 
-inline Mat3 makeScale( float s, const Vec3& a )
+[[nodiscard]] constexpr Mat3 makeScale( float s, const Vec3& a )
 {
   s -= 1.0F;
   auto x = s * a.x();
@@ -135,7 +138,7 @@ inline Mat3 makeScale( float s, const Vec3& a )
   return Mat3{ x * a.x() + 1.0F, axay, axaz, axay, y * a.y() + 1.0F, ayaz, axaz, ayaz, z * a.z() + 1.0F };
 }
 
-inline Mat3 makeSkew( float t, const Vec3& skew_direction, const Vec3& projected )
+[[nodiscard]] inline Mat3 makeSkew( float t, const Vec3& skew_direction, const Vec3& projected )
 {
   t      = std::tan( t );
   auto x = skew_direction.x() * t;

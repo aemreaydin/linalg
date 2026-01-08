@@ -11,20 +11,20 @@ class Line
   Vec3   m_line;
 
 public:
-  Line() = default;
-  Line( const Point3& point, const Vec3& line ) : m_point( point ), m_line( line ) {}
+  constexpr Line() = default;
+  constexpr Line( const Point3& point, const Vec3& line ) : m_point( point ), m_line( line ) {}
 
-  [[nodiscard]] inline const Vec3&   vector() const { return m_line; }
-  [[nodiscard]] inline const Point3& point() const { return m_point; }
+  [[nodiscard]] constexpr const Vec3&   vector() const { return m_line; }
+  [[nodiscard]] constexpr const Point3& point() const { return m_point; }
 };
 
-inline float distance( const Point3& point, const Line& line )
+[[nodiscard]] inline float distance( const Point3& point, const Line& line )
 {
   Vec3 cross_vec = cross( point - line.point(), line.vector() );
   return std::sqrt( dot( cross_vec, cross_vec ) / dot( line.vector(), line.vector() ) );
 }
 
-inline float distance( const Line& line_a, const Line& line_b )
+[[nodiscard]] inline float distance( const Line& line_a, const Line& line_b )
 {
   Vec3 ab = line_b.point() - line_a.point();
 

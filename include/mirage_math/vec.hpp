@@ -31,53 +31,53 @@ public:
 
   template<typename... Args>
     requires VecParams<T, N, Args...>
-  inline constexpr explicit Vec( Args... args ) : m_data{ args... }
+  constexpr explicit Vec( Args... args ) : m_data{ args... }
   {}
 
   template<size_t SubN = 3, typename U>
     requires( IsSame<T, U> )
-  inline constexpr Vec( const Vec<T, SubN>& vec, U value ) : m_data{ vec.x(), vec.y(), vec.z(), value }
+  constexpr Vec( const Vec<T, SubN>& vec, U value ) : m_data{ vec.x(), vec.y(), vec.z(), value }
   {}
 
-  inline T& operator[]( size_t i )
+  constexpr T& operator[]( size_t i )
   {
     assert( i < N );
     return m_data[i];
   }
-  inline const T& operator[]( size_t i ) const
+  constexpr const T& operator[]( size_t i ) const
   {
     assert( i < N );
     return m_data[i];
   }
 
-  inline T& x() { return m_data[0]; }
-  inline T& y() { return m_data[1]; }
-  inline T& z()
+  constexpr T& x() { return m_data[0]; }
+  constexpr T& y() { return m_data[1]; }
+  constexpr T& z()
     requires( N >= 3 )
   {
     return m_data[2];
   }
-  inline T& w()
+  constexpr T& w()
     requires( N >= 4 )
   {
     return m_data[3];
   }
 
-  [[nodiscard]] inline const T& x() const { return m_data[0]; }
-  [[nodiscard]] inline const T& y() const { return m_data[1]; }
-  [[nodiscard]] inline const T& z() const
+  [[nodiscard]] constexpr const T& x() const { return m_data[0]; }
+  [[nodiscard]] constexpr const T& y() const { return m_data[1]; }
+  [[nodiscard]] constexpr const T& z() const
     requires( N >= 3 )
   {
     return m_data[2];
   }
-  [[nodiscard]] inline const T& w() const
+  [[nodiscard]] constexpr const T& w() const
     requires( N >= 4 )
   {
     return m_data[3];
   }
 
   template<typename U>
-  inline Vec& operator+=( U val )
+  constexpr Vec& operator+=( U val )
     requires IsSame<T, U>
   {
     for ( auto& data : m_data )
@@ -88,7 +88,7 @@ public:
   }
 
   template<typename U>
-  inline Vec& operator-=( U val )
+  constexpr Vec& operator-=( U val )
     requires IsSame<T, U>
   {
     for ( auto& data : m_data )
@@ -99,7 +99,7 @@ public:
   }
 
   template<typename U>
-  inline Vec& operator*=( U val )
+  constexpr Vec& operator*=( U val )
     requires IsSame<T, U>
   {
     for ( auto& data : m_data )
@@ -110,7 +110,7 @@ public:
   }
 
   template<typename U>
-  inline Vec& operator/=( U val )
+  constexpr Vec& operator/=( U val )
     requires IsSame<T, U>
   {
     assert( val != 0.0F );
@@ -122,22 +122,30 @@ public:
   }
 
   template<size_t U>
-  inline Vec<T, U>& toSubVec()
-    requires( U < N )
+  [[nodiscard]] constexpr Vec<T, U> toSubVec() const
+    requires( U <= N )
   {
-    return *reinterpret_cast<Vec<T, U>*>( m_data.data() );
+    Vec<T, U> result{};
+    for ( size_t i = 0; i < U; ++i )
+    {
+      result[i] = m_data[i];
+    }
+    return result;
   }
 
   template<size_t U>
-  const inline Vec<T, U>& toSubVec() const
-    requires( U < N )
+  constexpr void setSubVec( const Vec<T, U>& sub )
+    requires( U <= N )
   {
-    return *reinterpret_cast<const Vec<T, U>*>( m_data.data() );
+    for ( size_t i = 0; i < U; ++i )
+    {
+      m_data[i] = sub[i];
+    }
   }
 
-  inline void normalizeInPlace() { *this /= magnitude( *this ); }
+  void normalizeInPlace() { *this /= magnitude( *this ); }
 
-  explicit inline operator std::string() const
+  explicit operator std::string() const
   {
     std::string result = "Vec" + std::to_string( N ) + "(";
     for ( size_t i = 0; i < N; i++ )
@@ -154,10 +162,10 @@ public:
 };
 
 template<typename T, size_t N>
-inline Vec<T, N> operator+( const Vec<T, N>& left, const Vec<T, N>& right )
+[[nodiscard]] constexpr Vec<T, N> operator+( const Vec<T, N>& left, const Vec<T, N>& right )
 {
   Vec<T, N> vec{};
-  for ( auto i = 0; i != N; ++i )
+  for ( size_t i = 0; i != N; ++i )
   {
     vec[i] = left[i] + right[i];
   }
@@ -165,10 +173,10 @@ inline Vec<T, N> operator+( const Vec<T, N>& left, const Vec<T, N>& right )
 }
 
 template<typename T, size_t N>
-inline Vec<T, N> operator-( const Vec<T, N>& left, const Vec<T, N>& right )
+[[nodiscard]] constexpr Vec<T, N> operator-( const Vec<T, N>& left, const Vec<T, N>& right )
 {
   Vec<T, N> vec{};
-  for ( auto i = 0; i != N; ++i )
+  for ( size_t i = 0; i != N; ++i )
   {
     vec[i] = left[i] - right[i];
   }
@@ -176,10 +184,10 @@ inline Vec<T, N> operator-( const Vec<T, N>& left, const Vec<T, N>& right )
 }
 
 template<typename T, size_t N>
-inline Vec<T, N> operator-( const Vec<T, N>& left )
+[[nodiscard]] constexpr Vec<T, N> operator-( const Vec<T, N>& left )
 {
   Vec<T, N> vec{};
-  for ( auto i = 0; i != N; ++i )
+  for ( size_t i = 0; i != N; ++i )
   {
     vec[i] = -left[i];
   }
@@ -187,10 +195,10 @@ inline Vec<T, N> operator-( const Vec<T, N>& left )
 }
 
 template<typename T, size_t N>
-inline Vec<T, N> operator*( const Vec<T, N>& vec, T mul )
+[[nodiscard]] constexpr Vec<T, N> operator*( const Vec<T, N>& vec, T mul )
 {
   Vec<T, N> result{};
-  for ( auto i = 0; i != N; ++i )
+  for ( size_t i = 0; i != N; ++i )
   {
     result[i] = vec[i] * mul;
   }
@@ -198,17 +206,17 @@ inline Vec<T, N> operator*( const Vec<T, N>& vec, T mul )
 }
 
 template<typename T, size_t N>
-inline Vec<T, N> operator*( T mul, const Vec<T, N>& vec )
+[[nodiscard]] constexpr Vec<T, N> operator*( T mul, const Vec<T, N>& vec )
 {
   return vec * mul;
 }
 
 template<typename T, size_t N>
-inline Vec<T, N> operator/( const Vec<T, N>& left, T div )
+[[nodiscard]] constexpr Vec<T, N> operator/( const Vec<T, N>& left, T div )
 {
   assert( div != 0.0F );
   Vec<T, N> vec{};
-  for ( auto i = 0; i != N; ++i )
+  for ( size_t i = 0; i != N; ++i )
   {
     vec[i] = left[i] / div;
   }
@@ -216,10 +224,10 @@ inline Vec<T, N> operator/( const Vec<T, N>& left, T div )
 }
 
 template<typename T, size_t N>
-inline T magnitudeSquared( const Vec<T, N>& vec )
+[[nodiscard]] constexpr T magnitudeSquared( const Vec<T, N>& vec )
 {
   T result{};
-  for ( auto i = 0; i != N; ++i )
+  for ( size_t i = 0; i != N; ++i )
   {
     result += vec[i] * vec[i];
   }
@@ -227,22 +235,22 @@ inline T magnitudeSquared( const Vec<T, N>& vec )
 }
 
 template<typename T, size_t N>
-inline T magnitude( const Vec<T, N>& vec )
+[[nodiscard]] inline T magnitude( const Vec<T, N>& vec )
 {
   return std::sqrt( magnitudeSquared( vec ) );
 }
 
 template<typename T, size_t N>
-inline Vec<T, N> normalized( const Vec<T, N>& vec )
+[[nodiscard]] inline Vec<T, N> normalized( const Vec<T, N>& vec )
 {
   return vec / magnitude( vec );
 }
 
 template<typename T, size_t N>
-inline T dot( const Vec<T, N>& left, const Vec<T, N>& right )
+[[nodiscard]] constexpr T dot( const Vec<T, N>& left, const Vec<T, N>& right )
 {
   T result{};
-  for ( auto i = 0; i != N; ++i )
+  for ( size_t i = 0; i != N; ++i )
   {
     result += left[i] * right[i];
   }
@@ -250,7 +258,7 @@ inline T dot( const Vec<T, N>& left, const Vec<T, N>& right )
 }
 
 template<typename T, size_t N>
-inline Vec<T, N> cross( const Vec<T, N>& left, const Vec<T, N>& right )
+[[nodiscard]] constexpr Vec<T, N> cross( const Vec<T, N>& left, const Vec<T, N>& right )
   requires( N == 3 )
 {
   return Vec<T, N>{ left[1] * right[2] - left[2] * right[1],
@@ -259,19 +267,19 @@ inline Vec<T, N> cross( const Vec<T, N>& left, const Vec<T, N>& right )
 }
 
 template<typename T, size_t N>
-inline Vec<T, N> project( const Vec<T, N>& source, const Vec<T, N>& target )
+[[nodiscard]] constexpr Vec<T, N> project( const Vec<T, N>& source, const Vec<T, N>& target )
 {
   return target * ( dot( source, target ) ) / dot( target, target );
 }
 
 template<typename T, size_t N>
-inline Vec<T, N> reject( const Vec<T, N>& source, const Vec<T, N>& target )
+[[nodiscard]] constexpr Vec<T, N> reject( const Vec<T, N>& source, const Vec<T, N>& target )
 {
   return source - project( source, target );
 }
 
 template<typename T, size_t N>
-inline bool isUnitVector( const Vec<T, N>& vec, const T epsilon = EPSILON )
+[[nodiscard]] inline bool isUnitVector( const Vec<T, N>& vec, const T epsilon = EPSILON )
 {
   return std::abs( dot( vec, vec ) - UNIT ) < epsilon;
 }

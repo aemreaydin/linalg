@@ -12,26 +12,26 @@ class Plane : public Vec4
 public:
   using Vec4::Vec4;
 
-  [[nodiscard]] inline const Vec3& getNormal() const { return toSubVec<3>(); }
+  [[nodiscard]] constexpr Vec3 getNormal() const { return toSubVec<3>(); }
 
-  inline void normalizeInPlace()
+  void normalizeInPlace()
   {
     float mag = magnitude( getNormal() );
     *this /= mag;
   }
 };
 
-inline float dot( const Plane& plane, const Point3& point )
+[[nodiscard]] constexpr float dot( const Plane& plane, const Point3& point )
 {
   return plane.x() * point.x() + plane.y() * point.y() + plane.z() * point.z() + plane.w();
 }
 
-inline float dot( const Plane& plane, const Vec3& point )
+[[nodiscard]] constexpr float dot( const Plane& plane, const Vec3& point )
 {
   return plane.x() * point.x() + plane.y() * point.y() + plane.z() * point.z();
 }
 
-Plane operator*( const Plane& plane, const Transform4& transform )
+[[nodiscard]] constexpr Plane operator*( const Plane& plane, const Transform4& transform )
 {
   return Plane{
     plane.x() * transform( 0, 0 ) + plane.y() * transform( 1, 0 ) + plane.z() * transform( 2, 0 ),
@@ -41,7 +41,7 @@ Plane operator*( const Plane& plane, const Transform4& transform )
   };
 }
 
-inline Transform4 makeReflection( const Plane& plane )
+[[nodiscard]] constexpr Transform4 makeReflection( const Plane& plane )
 {
   float nx_sq = -2.0F * plane.x() * plane.x();
   float ny_sq = -2.0F * plane.y() * plane.y();
@@ -69,14 +69,14 @@ inline Transform4 makeReflection( const Plane& plane )
   };
 }
 
-inline std::optional<Point3> getIntersection( const Plane& plane, const Line& line )
+[[nodiscard]] constexpr std::optional<Point3> getIntersection( const Plane& plane, const Line& line )
 {
   float fp = dot( plane, line.point() );
   float fv = dot( plane, line.vector() );
   return std::fabs( fv ) > FLOAT_MIN ? std::optional{ line.point() - ( fp / fv ) * line.vector() } : std::nullopt;
 }
 
-inline std::optional<Point3> getIntersection( const Plane& a, const Plane& b, const Plane& c )
+[[nodiscard]] constexpr std::optional<Point3> getIntersection( const Plane& a, const Plane& b, const Plane& c )
 {
   const Vec3& na = a.getNormal();
   const Vec3& nb = b.getNormal();
@@ -91,7 +91,7 @@ inline std::optional<Point3> getIntersection( const Plane& a, const Plane& b, co
            : std::nullopt;
 }
 
-inline std::optional<Line> getIntersection( const Plane& a, const Plane& b )
+[[nodiscard]] constexpr std::optional<Line> getIntersection( const Plane& a, const Plane& b )
 {
   const Vec3& na = a.getNormal();
   const Vec3& nb = b.getNormal();

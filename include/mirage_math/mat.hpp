@@ -8,65 +8,60 @@
 namespace Mirage::Math {
 
 template<typename T, size_t Row, size_t Col, typename... Ts>
-concept MatConstructorT = (... && IsSame<T, Ts>)&&( ( sizeof...( Ts ) == Row * Col ) );
+concept MatConstructorT = ( ... && IsSame<T, Ts> ) && ( ( sizeof...( Ts ) == Row * Col ) );
 
 template<typename T, size_t Row, size_t Col, typename... Ts>
-concept MatConstructorVec = (... && IsSame<Vec<T, Row>, Ts>)&&( ( sizeof...( Ts ) == Row ) );
+concept MatConstructorVec = ( ... && IsSame<Vec<T, Row>, Ts> ) && ( ( sizeof...( Ts ) == Row ) );
 
 template<typename T, size_t Row, size_t Col>
   requires Arithmetic<T>
 class Mat
 {
-  std::array<std::array<T, Col>, Row> m_data{};
+  std::array<Vec<T, Col>, Row> m_data{};
 
 public:
   Mat() = default;
 
-  // template<typename... Args>
-  //   requires MatConstructorT<T, Row, Col, Args...>
-  // inline constexpr explicit Mat( Args&&... args ) : m_data{ std::forward<Args>( args )... }
-  // {}
-
-  static constexpr Mat identity()
+  [[nodiscard]] static constexpr Mat identity()
     requires( Row == Col )
   {
     Mat result{};
-    for ( auto i = 0; i != Row; ++i )
+    for ( size_t i = 0; i != Row; ++i )
     {
       result( i, i ) = 1.0F;
     }
     return result;
   }
 
-  inline T& operator()( size_t i, size_t j )
+  constexpr T& operator()( size_t i, size_t j )
   {
     assert( i < Row && j < Col );
     return m_data[j][i];
   }
 
-  const T& operator()( size_t i, size_t j ) const
+  [[nodiscard]] constexpr const T& operator()( size_t i, size_t j ) const
   {
     assert( i < Row && j < Col );
     return m_data[j][i];
   }
 
-  inline Vec<T, Col>& operator[]( const size_t i )
+  constexpr Vec<T, Col>& operator[]( const size_t i )
   {
     assert( i < Col );
-    return *reinterpret_cast<Vec<T, Col>*>( m_data[i].data() );
+    return m_data[i];
   }
 
-  inline const Vec<T, Col>& operator[]( size_t i ) const
+  [[nodiscard]] constexpr const Vec<T, Col>& operator[]( size_t i ) const
   {
     assert( i < Col );
-    return *reinterpret_cast<const Vec<T, Col>*>( m_data[i].data() );
+    return m_data[i];
   }
 
-  inline Mat& operator+=( const Mat& other )
+  constexpr Mat& operator+=( const Mat& other )
   {
-    for ( auto i = 0; i != Row; ++i )
+    for ( size_t i = 0; i != Row; ++i )
     {
-      for ( auto j = 0; j != Col; ++j )
+      for ( size_t j = 0; j != Col; ++j )
       {
         m_data[i][j] += other.m_data[i][j];
       }
@@ -74,11 +69,11 @@ public:
     return *this;
   }
 
-  inline Mat& operator-=( const Mat& other )
+  constexpr Mat& operator-=( const Mat& other )
   {
-    for ( auto i = 0; i != Row; ++i )
+    for ( size_t i = 0; i != Row; ++i )
     {
-      for ( auto j = 0; j != Col; ++j )
+      for ( size_t j = 0; j != Col; ++j )
       {
         m_data[i][j] -= other.m_data[i][j];
       }
@@ -86,14 +81,14 @@ public:
     return *this;
   }
 
-  inline Mat operator-() const
+  [[nodiscard]] constexpr Mat operator-() const
   {
     Mat result;
-    for ( auto i = 0; i != Row; ++i )
+    for ( size_t i = 0; i != Row; ++i )
     {
-      for ( auto j = 0; j != Col; ++j )
+      for ( size_t j = 0; j != Col; ++j )
       {
-        result[i][j] = -m_data[i][j];
+        result.m_data[i][j] = -m_data[i][j];
       }
     }
     return result;
@@ -101,13 +96,13 @@ public:
 
   template<typename U>
     requires IsSame<T, U>
-  inline Mat& operator*=( U mul )
+  constexpr Mat& operator*=( U mul )
   {
-    for ( auto& row : m_data )
+    for ( size_t i = 0; i != Row; ++i )
     {
-      for ( auto& col : row )
+      for ( size_t j = 0; j != Col; ++j )
       {
-        col *= mul;
+        m_data[i][j] *= mul;
       }
     }
     return *this;
@@ -115,24 +110,22 @@ public:
 
   template<typename U>
     requires IsSame<T, U>
-  inline Mat& operator/=( U div )
+  constexpr Mat& operator/=( U div )
   {
     assert( div != 0.0F );
-    for ( auto& row : m_data )
+    for ( size_t i = 0; i != Row; ++i )
     {
-      for ( auto& col : row )
+      for ( size_t j = 0; j != Col; ++j )
       {
-        col /= div;
+        m_data[i][j] /= div;
       }
     }
     return *this;
   }
-
-  // TODO: Add std::string
 };
 
 template<typename T, size_t N>
-inline Mat<T, N, N> operator+( const Mat<T, N, N>& left, const Mat<T, N, N>& right )
+[[nodiscard]] constexpr Mat<T, N, N> operator+( const Mat<T, N, N>& left, const Mat<T, N, N>& right )
 {
   auto mat = left;
   mat += right;
@@ -140,7 +133,7 @@ inline Mat<T, N, N> operator+( const Mat<T, N, N>& left, const Mat<T, N, N>& rig
 }
 
 template<typename T, size_t N>
-inline Mat<T, N, N> operator-( const Mat<T, N, N>& left, const Mat<T, N, N>& right )
+[[nodiscard]] constexpr Mat<T, N, N> operator-( const Mat<T, N, N>& left, const Mat<T, N, N>& right )
 {
   auto mat = left;
   mat -= right;
@@ -148,14 +141,14 @@ inline Mat<T, N, N> operator-( const Mat<T, N, N>& left, const Mat<T, N, N>& rig
 }
 
 template<typename T, size_t N>
-inline Mat<T, N, N> operator*( const Mat<T, N, N>& left, const Mat<T, N, N>& right )
+[[nodiscard]] constexpr Mat<T, N, N> operator*( const Mat<T, N, N>& left, const Mat<T, N, N>& right )
 {
   Mat<T, N, N> mat{};
-  for ( auto i = 0; i != N; ++i )
+  for ( size_t i = 0; i != N; ++i )
   {
-    for ( auto j = 0; j != N; ++j )
+    for ( size_t j = 0; j != N; ++j )
     {
-      for ( auto k = 0; k != N; ++k )
+      for ( size_t k = 0; k != N; ++k )
       {
         mat( j, i ) += left( k, i ) * right( j, k );
       }
@@ -165,12 +158,12 @@ inline Mat<T, N, N> operator*( const Mat<T, N, N>& left, const Mat<T, N, N>& rig
 }
 
 template<typename T, size_t N>
-inline Vec<T, N> operator*( const Mat<T, N, N>& mat, const Vec<T, N>& vec )
+[[nodiscard]] constexpr Vec<T, N> operator*( const Mat<T, N, N>& mat, const Vec<T, N>& vec )
 {
   Vec<T, N> result{};
-  for ( auto i = 0; i != N; ++i )
+  for ( size_t i = 0; i != N; ++i )
   {
-    for ( auto j = 0; j != N; ++j )
+    for ( size_t j = 0; j != N; ++j )
     {
       result[i] += mat( j, i ) * vec[j];
     }
@@ -179,7 +172,7 @@ inline Vec<T, N> operator*( const Mat<T, N, N>& mat, const Vec<T, N>& vec )
 }
 
 template<typename T, size_t N>
-inline Mat<T, N, N> operator*( const Mat<T, N, N>& a, float mul )
+[[nodiscard]] constexpr Mat<T, N, N> operator*( const Mat<T, N, N>& a, float mul )
 {
   auto mat = a;
   mat *= mul;
@@ -187,7 +180,7 @@ inline Mat<T, N, N> operator*( const Mat<T, N, N>& a, float mul )
 }
 
 template<typename T, size_t N>
-inline Mat<T, N, N> operator/( const Mat<T, N, N>& a, float div )
+[[nodiscard]] constexpr Mat<T, N, N> operator/( const Mat<T, N, N>& a, float div )
 {
   auto mat = a;
   mat /= div;
@@ -195,7 +188,7 @@ inline Mat<T, N, N> operator/( const Mat<T, N, N>& a, float div )
 }
 
 template<typename T, size_t N>
-inline Mat<T, N, N> transpose( const Mat<T, N, N>& mat )
+[[nodiscard]] constexpr Mat<T, N, N> transpose( const Mat<T, N, N>& mat )
 {
   Mat<T, N, N> result{};
   for ( size_t i = 0; i < N; ++i )
