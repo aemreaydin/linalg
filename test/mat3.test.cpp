@@ -1,7 +1,7 @@
 #include "mirage_math/mat3.hpp"
 #include "test_utils.hpp"
-#include <gtest/gtest.h>
 #include <gtest/gtest-death-test.h>
+#include <gtest/gtest.h>
 
 using namespace Mirage::Math;
 
@@ -47,9 +47,9 @@ TEST_F( Mat3Test, HandlesVectorInitialization )
 TEST_F( Mat3Test, HandlesInitializationList )
 {
   Mat3 mat{
-    Vec3{1.0F, 2.0F, 3.0F},
-    Vec3{4.0F, 5.0F, 6.0F},
-    Vec3{7.0F, 8.0F, 9.0F}
+    Vec3{ 1.0F, 2.0F, 3.0F },
+    Vec3{ 4.0F, 5.0F, 6.0F },
+    Vec3{ 7.0F, 8.0F, 9.0F }
   };
 
   EXPECT_FLOAT_EQ( mat( 0, 0 ), 1.0F );
@@ -66,17 +66,17 @@ TEST_F( Mat3Test, HandlesInitializationList )
 TEST_F( Mat3Test, UnaryNegation )
 {
   Mat3 mat{
-    Vec3{1.0F, -2.0F, 3.0F},
-    Vec3{4.0F, -5.0F, 6.0F},
-    Vec3{7.0F, -8.0F, 9.0F}
+    Vec3{ 1.0F, -2.0F, 3.0F },
+    Vec3{ 4.0F, -5.0F, 6.0F },
+    Vec3{ 7.0F, -8.0F, 9.0F }
   };
 
   Mat3 negated = -mat;
 
   Mat3 expected{
-    Vec3{-1.0F, 2.0F, -3.0F},
-    Vec3{-4.0F, 5.0F, -6.0F},
-    Vec3{-7.0F, 8.0F, -9.0F}
+    Vec3{ -1.0F, 2.0F, -3.0F },
+    Vec3{ -4.0F, 5.0F, -6.0F },
+    Vec3{ -7.0F, 8.0F, -9.0F }
   };
 
   EXPECT_TRUE( areMatricesEqual( negated, expected ) );
@@ -93,9 +93,9 @@ TEST_F( Mat3Test, HandlesIndexOperator )
   row.x() = 10.0F;
   EXPECT_FLOAT_EQ( matrix( 0, 1 ), 10.0F );
 
-  ASSERT_DEATH( matrix( 3, 0 ), "" );
-  ASSERT_DEATH( matrix( 0, 3 ), "" );
-  ASSERT_DEATH( matrix[3], "" );
+  ASSERT_DEATH( (void)matrix( 3, 0 ), "" );
+  ASSERT_DEATH( (void)matrix( 0, 3 ), "" );
+  ASSERT_DEATH( (void)matrix[3], "" );
 }
 
 TEST_F( Mat3Test, AdditionOperator )
@@ -129,7 +129,7 @@ TEST_F( Mat3Test, ScalarDivisionOperator )
   EXPECT_FLOAT_EQ( result( 1, 1 ), 2.5F );
   EXPECT_FLOAT_EQ( result( 2, 2 ), 4.5F );
 
-  ASSERT_DEATH( testMat1 / 0.0F, "" );
+  ASSERT_DEATH( (void)( testMat1 / 0.0F ), "" );
 }
 
 TEST_F( Mat3Test, HandlesMatrixAddition )
@@ -182,9 +182,9 @@ TEST_F( Mat3Test, HandlesMatrixMultiplicationByVector )
   ASSERT_FLOAT_EQ( result[2], 42.0F );
 
   Mat3 test_mat{
-    Vec3{1.0F, 4.0F, 7.0F},
-    Vec3{2.0F, 5.0F, 8.0F},
-    Vec3{3.0F, 6.0F, 9.0F}
+    Vec3{ 1.0F, 4.0F, 7.0F },
+    Vec3{ 2.0F, 5.0F, 8.0F },
+    Vec3{ 3.0F, 6.0F, 9.0F }
   };
   auto result2 = test_mat * testVec;
   ASSERT_FLOAT_EQ( result2[0], 30.0F );
@@ -208,9 +208,9 @@ TEST_F( Mat3Test, Inverse )
 {
   const Mat3 mat{ 1.0F, 2.0F, 3.0F, 0.0F, 1.0F, 4.0F, 5.0F, 6.0F, 0.0F };
   Mat3       expected_inverse{
-    Vec3{-24.0F,  18.0F,  5.0F},
-    Vec3{ 20.0F, -15.0F, -4.0F},
-    Vec3{ -5.0F,   4.0F,  1.0F}
+    Vec3{ -24.0F,  18.0F,  5.0F },
+    Vec3{  20.0F, -15.0F, -4.0F },
+    Vec3{  -5.0F,   4.0F,  1.0F }
   };
   Mat3 actual_inverse = inverse( mat );
   for ( int i = 0; i < 3; ++i )
@@ -222,7 +222,7 @@ TEST_F( Mat3Test, Inverse )
   }
 
   const Mat3 zero_det_mat{ 1.0F, 2.0F, 3.0F, 1.0F, 2.0F, 3.0F, 1.0F, 2.0F, 3.0F };
-  ASSERT_DEATH( inverse( zero_det_mat ), "" );
+  ASSERT_DEATH( (void)inverse( zero_det_mat ), "" );
 }
 
 TEST_F( Mat3Test, RotationX )
@@ -257,10 +257,11 @@ TEST_F( Mat3Test, RotationZ )
 
 TEST_F( Mat3Test, GeneralRotation )
 {
-  float angle = M_PI / 4;
-  Vec3  axis{ 1.0F / std::sqrt( 3.0F ), 1.0F / std::sqrt( 3.0F ), 1.0F / std::sqrt( 3.0F ) };
-  auto  result = makeRotation( angle, axis );
-  Mat3  expected{
+  float       angle     = M_PI / 4;
+  const float inv_sqrt3 = 1.0F / std::sqrt( 3.0F );
+  Vec3        axis{ inv_sqrt3, inv_sqrt3, inv_sqrt3 };
+  auto        result = makeRotation( angle, axis );
+  Mat3        expected{
     0.8047379F, -0.3106172F, 0.5058793F, 0.5058793F, 0.8047379F, -0.3106172F, -0.3106172F, 0.5058793F, 0.8047379F
   };
   EXPECT_TRUE( areMatricesEqual( result, expected ) );

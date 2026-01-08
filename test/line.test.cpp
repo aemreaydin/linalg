@@ -87,7 +87,7 @@ TEST_F( LineTest, DistanceBetweenParallelLines )
   Line line_a( Point3{ 0.0F, 0.0F, 0.0F }, Vec3{ 1.0F, 1.0F, 1.0F } );
   Line line_b( Point3{ 0.0F, 1.0F, 1.0F }, Vec3{ 1.0F, 1.0F, 1.0F } );
 
-  float expected          = sqrt( 2.0F / 3.0F );
+  float expected          = std::sqrt( 2.0F / 3.0F );
   float distance_computed = distance( line_a, line_b );
   EXPECT_FLOAT_EQ( distance_computed, expected );
 }

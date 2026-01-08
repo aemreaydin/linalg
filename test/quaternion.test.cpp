@@ -1,8 +1,8 @@
 #include "mirage_math/quaternion.hpp"
 #include "mirage_math/constants.hpp"
 #include "test_utils.hpp"
-#include <gtest/gtest.h>
 #include <gtest/gtest-death-test.h>
+#include <gtest/gtest.h>
 
 using namespace Mirage::Math;
 
@@ -16,7 +16,7 @@ TEST_F( QuaternionTest, Constructor )
 {
   Quat quat{ 1.0F, 2.0F, 3.0F, 4.0F };
   Quat quat_from_vec{
-    Vec3{5.0F, 6.0F, 7.0F},
+    Vec3{ 5.0F, 6.0F, 7.0F },
     8.0F
   };
 

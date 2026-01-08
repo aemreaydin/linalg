@@ -41,7 +41,7 @@ TEST_F( Vec3Test, IndexingOperator )
   EXPECT_EQ( v1[1], 2.0F );
   EXPECT_EQ( v1[2], 3.0F );
 
-  EXPECT_DEATH( { v1[3]; }, "" );
+  EXPECT_DEATH( { (void)v1[3]; }, "" );
 }
 
 TEST_F( Vec3Test, AdditionOperator )
@@ -75,7 +75,7 @@ TEST_F( Vec3Test, DivisionOperatorScalar )
   EXPECT_EQ( result.y(), 2.5F );
   EXPECT_EQ( result.z(), 3.0F );
 
-  EXPECT_DEATH( { v2 / 0.0F; }, "" );
+  EXPECT_DEATH( { (void)( v2 / 0.0F ); }, "" );
 }
 
 TEST_F( Vec3Test, UnaryNegationOperator )
@@ -128,8 +128,8 @@ TEST_F( Vec3Test, StringOutput ) { EXPECT_EQ( std::string( v1 ), "Vec3(1.0, 2.0,
 
 TEST_F( Vec3Test, Magnitude )
 {
-  EXPECT_FLOAT_EQ( magnitude( v1 ), sqrt( 14.0F ) );
-  EXPECT_FLOAT_EQ( magnitude( v2 ), sqrt( 77.0F ) );
+  EXPECT_FLOAT_EQ( magnitude( v1 ), std::sqrt( 14.0F ) );
+  EXPECT_FLOAT_EQ( magnitude( v2 ), std::sqrt( 77.0F ) );
 }
 
 TEST_F( Vec3Test, Normalize )
@@ -200,7 +200,8 @@ TEST_F( Vec3Test, ProjectionAndRejection )
 
 TEST_F( Vec3Test, CheckUnitVector )
 {
-  Vec3 unit_vec{ 1.0F / sqrt( 3.0F ), 1.0F / sqrt( 3.0F ), 1.0F / sqrt( 3.0F ) };
+  const float inv_sqrt3 = 1.0F / std::sqrt( 3.0F );
+  Vec3        unit_vec{ inv_sqrt3, inv_sqrt3, inv_sqrt3 };
   EXPECT_TRUE( isUnitVector( unit_vec ) );
   Vec3 non_unit_vec{ 1.0F, 2.0F, 3.0F };
   EXPECT_FALSE( isUnitVector( non_unit_vec ) );
