@@ -1,14 +1,49 @@
 version: "3"
 tasks:
-  generate:
+  configure:
     cmds:
-      - cmake -GNinja -S "{{.USER_WORKING_DIR}}" -B "{{.USER_WORKING_DIR}}/build/Debug" -DCMAKE_BUILD_TYPE=Debug -DCMAKE_EXPORT_COMPILE_COMMANDS=1 -DCMAKE_TOOLCHAIN_FILE="{{.VCPKG_DIR}}"
-    vars:
-      VCPKG_DIR: "{{.USER_WORKING_DIR}}/vcpkg/scripts/buildsystems/vcpkg.cmake"
+      - cmake -B build/Debug .
+
   build:
     cmds:
       - cmake --build build/Debug --target all
+
+  build-release:
+    cmds:
+      - cmake --build build/Release --target all
+
   test:
     deps: [build]
     cmds:
       - ctest --test-dir build/Debug/test --stop-on-failure --output-on-failure
+
+  bench:
+    deps: [build-release]
+    cmds:
+      - ./build/Release/test/mirage_math_benchmarks
+
+  clean:
+    cmds:
+      - rm -rf build
+
+  format:
+    desc: Run clang-format on all source files
+    cmds:
+      - find include test \( -name "*.cpp" -o -name "*.hpp" -o -name "*.h" \) -print0 | xargs -0 clang-format -i --verbose
+
+  format-check:
+    desc: Check if code is formatted correctly (non-destructive)
+    cmds:
+      - find include test \( -name "*.cpp" -o -name "*.hpp" -o -name "*.h" \) -print0 | xargs -0 clang-format --dry-run -Werror --verbose
+
+  tidy:
+    desc: Run clang-tidy static analysis. Treats warnings as errors.
+    deps: [configure]
+    cmds:
+      - find include \( -name "*.cpp" -o -name "*.hpp" \) -print0 | xargs -0 clang-tidy -p build/Debug
+
+  tidy-fix:
+    desc: Run clang-tidy static analysis. Treats warnings as errors.
+    deps: [configure]
+    cmds:
+      - find include \( -name "*.cpp" -o -name "*.hpp" \) -print0 | xargs -0 clang-tidy -p build/Debug -fix

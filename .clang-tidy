@@ -1,5 +1,5 @@
 Checks: >
-  *, -cppcoreguidelines-avoid-magic-numbers, -cppcoreguidelines-pro-type-vararg, -cppcoreguidelines-avoid-c-arrays, -cppcoreguidelines-avoid-non-const-global-variables, -cppcoreguidelines-pro-bounds-pointer-arithmetic, -fuchsia-*, -google-*, -hicpp-no-array-decay, -hicpp-avoid-c-arrays, -llvm-header-guard, -llvm-include-order, -misc-no-recursion, -modernize-use-trailing-return-type, -readability-magic-numbers, -cert-*, -misc-*, -llvm*, -hicpp-*, -altera-*, -bugprone-easily-swappable-parameters, -cppcoreguidelines-non-private-member-variables-in-classes, -readability-identifier-length, -cppcoreguidelines-pro-type-reinterpret-cast, -cppcoreguidelines-pro-bounds-constant-array-index
+  *, -cppcoreguidelines-avoid-magic-numbers, -cppcoreguidelines-pro-type-vararg, -cppcoreguidelines-avoid-c-arrays, -cppcoreguidelines-avoid-non-const-global-variables, -cppcoreguidelines-pro-bounds-pointer-arithmetic, -fuchsia-*, -google-*, -hicpp-no-array-decay, -hicpp-avoid-c-arrays, -llvm-header-guard, -llvm-include-order, -misc-no-recursion, -modernize-use-trailing-return-type, -readability-magic-numbers, -cert-*, -misc-*, -llvm*, -hicpp-*, -altera-*, -bugprone-easily-swappable-parameters, -cppcoreguidelines-non-private-member-variables-in-classes, -readability-identifier-length, -cppcoreguidelines-pro-type-reinterpret-cast, -cppcoreguidelines-pro-bounds-constant-array-index, -portability-avoid-pragma-once, -readability-math-missing-parentheses
 
 CheckOptions:
   - key: modernize-use-auto.MinTypeNameLength
@@ -35,6 +35,8 @@ CheckOptions:
   - key: readability-identifier-naming.TypeAliasCase
     value: CamelCase
   - key: readability-identifier-naming.TypeTemplateParameterCase
+    value: CamelCase
+  - key: readability-identifier-naming.ConceptCase
     value: CamelCase
 WarningsAsErrors: '*'
 HeaderFilterRegex: '*'
