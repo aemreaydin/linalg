@@ -1,7 +1,7 @@
-#include "mirage_math/point.hpp"
+#include "linalg/point.hpp"
 #include <gtest/gtest.h>
 
-using namespace Mirage::Math;
+using namespace linalg;
 
 class Point3Test : public ::testing::Test
 {

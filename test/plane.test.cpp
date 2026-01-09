@@ -1,9 +1,9 @@
-#include "mirage_math/plane.hpp"
-#include "mirage_math/point.hpp"
+#include "linalg/plane.hpp"
+#include "linalg/point.hpp"
 #include <gtest/gtest-death-test.h>
 #include <gtest/gtest.h>
 
-using namespace Mirage::Math;
+using namespace linalg;
 
 class PlaneTest : public ::testing::Test
 {

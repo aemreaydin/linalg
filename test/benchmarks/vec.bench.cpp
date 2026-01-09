@@ -1,7 +1,7 @@
-#include "mirage_math/vec.hpp"
+#include "linalg/vec.hpp"
 #include <benchmark/benchmark.h>
 
-using namespace Mirage::Math;
+using namespace linalg;
 
 static void BM_Vec3Dot( benchmark::State& state )
 {

@@ -1,11 +1,11 @@
 #pragma once
 
-#include "mirage_math/line.hpp"
+#include "linalg/line.hpp"
 #include "point.hpp"
 #include "transform.hpp"
 #include "vec.hpp"
 
-namespace Mirage::Math {
+namespace linalg {
 
 class Plane : public Vec4
 {
@@ -108,4 +108,4 @@ public:
   return std::nullopt;
 }
 
-} // namespace Mirage::Math
+} // namespace linalg

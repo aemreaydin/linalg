@@ -1,9 +1,9 @@
-#include "mirage_math/mat3.hpp"
-#include "mirage_math/mat4.hpp"
-#include "mirage_math/transform.hpp"
+#include "linalg/mat3.hpp"
+#include "linalg/mat4.hpp"
+#include "linalg/transform.hpp"
 #include <benchmark/benchmark.h>
 
-using namespace Mirage::Math;
+using namespace linalg;
 
 static void BM_Mat3Multiply( benchmark::State& state )
 {

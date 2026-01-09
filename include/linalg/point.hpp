@@ -2,7 +2,7 @@
 
 #include "vec.hpp"
 
-namespace Mirage::Math {
+namespace linalg {
 
 class Point3 : public Vec3
 {
@@ -27,4 +27,4 @@ public:
   return Vec3{ a.x() - b.x(), a.y() - b.y(), a.z() - b.z() };
 }
 
-} // namespace Mirage::Math
+} // namespace linalg

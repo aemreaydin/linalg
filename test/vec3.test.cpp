@@ -1,8 +1,8 @@
-#include "mirage_math/vec.hpp"
+#include "linalg/vec.hpp"
 #include <gtest/gtest-death-test.h>
 #include <gtest/gtest.h>
 
-using namespace Mirage::Math;
+using namespace linalg;
 
 class Vec3Test : public ::testing::Test
 {

@@ -1,10 +1,10 @@
-#include "mirage_math/quaternion.hpp"
-#include "mirage_math/constants.hpp"
+#include "linalg/quaternion.hpp"
+#include "linalg/constants.hpp"
 #include "test_utils.hpp"
 #include <gtest/gtest-death-test.h>
 #include <gtest/gtest.h>
 
-using namespace Mirage::Math;
+using namespace linalg;
 
 class QuaternionTest : public ::testing::Test
 {

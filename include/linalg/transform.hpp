@@ -3,7 +3,7 @@
 #include "mat4.hpp"
 #include "point.hpp"
 
-namespace Mirage::Math {
+namespace linalg {
 
 class Transform4 : public Mat4
 {
@@ -118,4 +118,4 @@ public:
   return transformNormal( normal_vec, t );
 }
 
-} // namespace Mirage::Math
+} // namespace linalg

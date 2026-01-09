@@ -1,7 +1,7 @@
-#include "mirage_math/vec.hpp"
+#include "linalg/vec.hpp"
 #include <gtest/gtest.h>
 
-using namespace Mirage::Math;
+using namespace linalg;
 
 class Vec4Test : public ::testing::Test
 {

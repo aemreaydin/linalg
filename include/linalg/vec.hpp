@@ -9,7 +9,7 @@
 #include <string>
 #include <type_traits>
 
-namespace Mirage::Math {
+namespace linalg {
 
 template<typename T>
 concept Arithmetic = std::is_arithmetic_v<T>;
@@ -290,4 +290,4 @@ using Vec4  = Vec<float, 4>;
 using IVec3 = Vec<int, 3>;
 using IVec4 = Vec<int, 4>;
 
-} // namespace Mirage::Math
+} // namespace linalg

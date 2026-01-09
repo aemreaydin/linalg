@@ -1,6 +1,6 @@
 include(FetchContent)
 
-if(MIRAGE_BUILD_TESTS)
+if(LINALG_BUILD_TESTS)
     enable_testing()
 
     FetchContent_Declare(
@@ -12,21 +12,21 @@ if(MIRAGE_BUILD_TESTS)
     FetchContent_MakeAvailable(googletest)
 
     file(GLOB TEST_SOURCES *.test.cpp)
-    add_executable(mirage_math_tests ${TEST_SOURCES})
+    add_executable(linalg_tests ${TEST_SOURCES})
     target_link_libraries(
-        mirage_math_tests
-        PRIVATE mirage_math GTest::gtest GTest::gtest_main
+        linalg_tests
+        PRIVATE linalg GTest::gtest GTest::gtest_main
     )
     target_include_directories(
-        mirage_math_tests
+        linalg_tests
         PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}
     )
 
     include(GoogleTest)
-    gtest_discover_tests(mirage_math_tests)
+    gtest_discover_tests(linalg_tests)
 endif()
 
-if(MIRAGE_BUILD_BENCHMARKS)
+if(LINALG_BUILD_BENCHMARKS)
     FetchContent_Declare(
         benchmark
         GIT_REPOSITORY https://github.com/google/benchmark.git
@@ -38,10 +38,10 @@ if(MIRAGE_BUILD_BENCHMARKS)
 
     file(GLOB BENCH_SOURCES benchmarks/*.bench.cpp)
     if(BENCH_SOURCES)
-        add_executable(mirage_math_benchmarks ${BENCH_SOURCES})
+        add_executable(linalg_benchmarks ${BENCH_SOURCES})
         target_link_libraries(
-            mirage_math_benchmarks
-            PRIVATE mirage_math benchmark::benchmark benchmark::benchmark_main
+            linalg_benchmarks
+            PRIVATE linalg benchmark::benchmark benchmark::benchmark_main
         )
     endif()
 endif()

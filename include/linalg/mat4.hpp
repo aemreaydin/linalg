@@ -2,7 +2,7 @@
 
 #include "mat.hpp"
 
-namespace Mirage::Math {
+namespace linalg {
 
 class Mat4 : public Mat<float, 4, 4>
 {
@@ -89,4 +89,4 @@ public:
     dot( c, s ) };
 }
 
-} // namespace Mirage::Math
+} // namespace linalg

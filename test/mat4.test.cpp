@@ -1,9 +1,9 @@
-#include "mirage_math/mat4.hpp"
+#include "linalg/mat4.hpp"
 #include "test_utils.hpp"
 #include <gtest/gtest-death-test.h>
 #include <gtest/gtest.h>
 
-using namespace Mirage::Math;
+using namespace linalg;
 
 class Mat4Test : public ::testing::Test
 {

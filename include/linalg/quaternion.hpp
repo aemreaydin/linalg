@@ -3,7 +3,7 @@
 #include "mat3.hpp"
 #include "vec.hpp"
 
-namespace Mirage::Math {
+namespace linalg {
 
 class Quaternion : public Vec4
 {
@@ -98,4 +98,4 @@ public:
 
 using Quat = Quaternion;
 
-} // namespace Mirage::Math
+} // namespace linalg

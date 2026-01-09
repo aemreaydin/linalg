@@ -3,7 +3,7 @@
 #include "point.hpp"
 #include "vec.hpp"
 
-namespace Mirage::Math {
+namespace linalg {
 
 class Line
 {
@@ -46,8 +46,7 @@ public:
     return magnitude( ( line_b.point() + t2 * line_b.vector() ) - ( line_a.point() + t1 * line_a.vector() ) );
   }
 
-  // Lines are parallel, so just calculate the distance between line_a and point_b
   return distance( line_b.point(), line_a );
 }
 
-} // namespace Mirage::Math
+} // namespace linalg

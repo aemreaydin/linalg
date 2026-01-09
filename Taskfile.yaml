@@ -7,7 +7,7 @@ vars:
 tasks:
   configure:
     cmds:
-      - cmake -B build/{{.BUILD_TYPE}} -DCMAKE_BUILD_TYPE={{.BUILD_TYPE}} -DMIRAGE_BUILD_BENCHMARKS={{.BENCHMARKS}} .
+      - cmake -B build/{{.BUILD_TYPE}} -DCMAKE_BUILD_TYPE={{.BUILD_TYPE}} -DLINALG_BUILD_BENCHMARKS={{.BENCHMARKS}} .
 
   build:
     deps:
@@ -28,7 +28,7 @@ tasks:
       - task: build
         vars: { BUILD_TYPE: "{{.BUILD_TYPE}}", BENCHMARKS: "{{.BENCHMARKS}}" }
     cmds:
-      - ./build/{{.BUILD_TYPE}}/test/mirage_math_benchmarks
+      - ./build/{{.BUILD_TYPE}}/test/linalg_benchmarks
 
   clean:
     cmds:

@@ -1,7 +1,7 @@
 #pragma once
 #include "mat.hpp"
 
-namespace Mirage::Math {
+namespace linalg {
 
 class Mat3 : public Mat<float, 3, 3>
 {
@@ -156,4 +156,4 @@ public:
     z * projected.z() + 1.0F };
 }
 
-} // namespace Mirage::Math
+} // namespace linalg

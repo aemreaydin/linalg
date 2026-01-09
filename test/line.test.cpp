@@ -1,8 +1,8 @@
-#include "mirage_math/line.hpp"
+#include "linalg/line.hpp"
 #include <gtest/gtest-death-test.h>
 #include <gtest/gtest.h>
 
-using namespace Mirage::Math;
+using namespace linalg;
 
 class LineTest : public ::testing::Test
 {

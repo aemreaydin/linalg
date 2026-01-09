@@ -5,7 +5,7 @@
 #include <cassert>
 #include <cstddef>
 
-namespace Mirage::Math {
+namespace linalg {
 
 template<typename T, size_t Row, size_t Col, typename... Ts>
 concept MatConstructorT = ( ... && IsSame<T, Ts> ) && ( ( sizeof...( Ts ) == Row * Col ) );
@@ -201,4 +201,4 @@ template<typename T, size_t N>
   return result;
 }
 
-} // namespace Mirage::Math
+} // namespace linalg

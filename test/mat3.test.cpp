@@ -1,9 +1,9 @@
-#include "mirage_math/mat3.hpp"
+#include "linalg/mat3.hpp"
 #include "test_utils.hpp"
 #include <gtest/gtest-death-test.h>
 #include <gtest/gtest.h>
 
-using namespace Mirage::Math;
+using namespace linalg;
 
 class Mat3Test : public ::testing::Test
 {

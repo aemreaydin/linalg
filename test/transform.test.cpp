@@ -1,9 +1,9 @@
-#include "mirage_math/transform.hpp"
+#include "linalg/transform.hpp"
 #include "test_utils.hpp"
 #include <gtest/gtest-death-test.h>
 #include <gtest/gtest.h>
 
-using namespace Mirage::Math;
+using namespace linalg;
 
 class Transform4Test : public ::testing::Test
 {

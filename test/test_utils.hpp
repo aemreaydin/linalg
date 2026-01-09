@@ -1,10 +1,10 @@
 #pragma once
-#include "mirage_math/constants.hpp"
-#include "mirage_math/mat.hpp"
+#include "linalg/constants.hpp"
+#include "linalg/mat.hpp"
 
 template<typename T, size_t N>
 static bool areMatricesEqual(
-  const Mirage::Math::Mat<T, N, N>& mat1, const Mirage::Math::Mat<T, N, N>& mat2, float tol = Mirage::Math::EPSILON )
+  const linalg::Mat<T, N, N>& mat1, const linalg::Mat<T, N, N>& mat2, float tol = linalg::EPSILON )
 {
   for ( auto i = 0; i != N; ++i )
   {
@@ -21,7 +21,7 @@ static bool areMatricesEqual(
 
 template<typename T, size_t N>
 static bool areVectorsEqual(
-  const Mirage::Math::Vec<T, N>& vec1, const Mirage::Math::Vec<T, N>& vec2, float tol = Mirage::Math::EPSILON )
+  const linalg::Vec<T, N>& vec1, const linalg::Vec<T, N>& vec2, float tol = linalg::EPSILON )
 {
   for ( auto i = 0; i != N; ++i )
   {
