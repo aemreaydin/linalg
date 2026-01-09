@@ -1,5 +1,7 @@
 # Linalg
 
+[![CI](https://github.com/aemreaydin/linalg/actions/workflows/ci.yml/badge.svg)](https://github.com/aemreaydin/linalg/actions/workflows/ci.yml)
+
 A high-performance, header-only C++23 linear algebra library designed for graphics, physics, and general-purpose mathematics.
 
 ## Features
@@ -75,3 +77,9 @@ go-task tidy
 ```bash
 go-task format
 ```
+
+### CI/CD
+
+The project uses GitHub Actions for continuous integration. The workflow is defined in `.github/workflows/ci.yml` and runs on every push and pull request to the `main` branch. It performs the following steps:
+1.  **Build:** Configures and builds the project using CMake and GCC 14 on Ubuntu.
+2.  **Test:** Runs the GoogleTest suite using `ctest`.
