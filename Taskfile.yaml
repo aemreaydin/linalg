@@ -1,26 +1,34 @@
 version: "3"
+
+vars:
+  BUILD_TYPE: '{{default "Debug" .BUILD_TYPE}}'
+  BENCHMARKS: '{{default "OFF" .BENCHMARKS}}'
+
 tasks:
   configure:
     cmds:
-      - cmake -B build/Debug .
+      - cmake -B build/{{.BUILD_TYPE}} -DCMAKE_BUILD_TYPE={{.BUILD_TYPE}} -DMIRAGE_BUILD_BENCHMARKS={{.BENCHMARKS}} .
 
   build:
+    deps:
+      - task: configure
+        vars: { BUILD_TYPE: "{{.BUILD_TYPE}}", BENCHMARKS: "{{.BENCHMARKS}}" }
     cmds:
-      - cmake --build build/Debug --target all
-
-  build-release:
-    cmds:
-      - cmake --build build/Release --target all
+      - cmake --build build/{{.BUILD_TYPE}} --target all
 
   test:
+    vars: { BUILD_TYPE: "Debug" }
     deps: [build]
     cmds:
-      - ctest --test-dir build/Debug/test --stop-on-failure --output-on-failure
+      - ctest --test-dir build/{{.BUILD_TYPE}}/test --stop-on-failure --output-on-failure
 
   bench:
-    deps: [build-release]
+    vars: { BUILD_TYPE: "Release", BENCHMARKS: "ON" }
+    deps:
+      - task: build
+        vars: { BUILD_TYPE: "{{.BUILD_TYPE}}", BENCHMARKS: "{{.BENCHMARKS}}" }
     cmds:
-      - ./build/Release/test/mirage_math_benchmarks
+      - ./build/{{.BUILD_TYPE}}/test/mirage_math_benchmarks
 
   clean:
     cmds:
@@ -38,12 +46,15 @@ tasks:
 
   tidy:
     desc: Run clang-tidy static analysis. Treats warnings as errors.
+    vars: { BUILD_TYPE: "Debug" }
     deps: [configure]
     cmds:
-      - find include \( -name "*.cpp" -o -name "*.hpp" \) -print0 | xargs -0 clang-tidy -p build/Debug
+      - find include \( -name "*.cpp" -o -name "*.hpp" \) -print0 | xargs -0 clang-tidy -p build/{{.BUILD_TYPE}} -fix
 
-  tidy-fix:
-    desc: Run clang-tidy static analysis. Treats warnings as errors.
+  tidy-check:
+    desc: Run clang-tidy static analysis. Treats warnings as errors. Try to fix the errors.
+    vars: { BUILD_TYPE: "Debug" }
     deps: [configure]
     cmds:
-      - find include \( -name "*.cpp" -o -name "*.hpp" \) -print0 | xargs -0 clang-tidy -p build/Debug -fix
+      - find include \( -name "*.cpp" -o -name "*.hpp" \) -print0 | xargs -0 clang-tidy -p build/{{.BUILD_TYPE}}
+
