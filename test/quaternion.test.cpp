@@ -36,17 +36,17 @@ TEST_F( QuaternionTest, NoRotation )
   Vec3 v{ 1.0F, 0.0F, 0.0F };
   Quat q{ 1.0F, 0.0F, 0.0F, 0.0F };
   Vec3 transformed = transform( v, q );
-  areVectorsEqual( v, transformed );
+  are_vectors_equal( v, transformed );
 }
 
 TEST_F( QuaternionTest, NinetyDegreeRotationAroundZ )
 {
   Vec3  v{ 1.0F, 0.0F, 0.0F };
-  float sqrt2_2 = 1.0F / std::sqrt( 2.0F );
+  float sqrt2_2 = 1.0F / std::numbers::sqrt2_v<float>;
   Quat  q{ 0.0F, 0.0F, sqrt2_2, sqrt2_2 };
   Vec3  transformed = transform( v, q );
   Vec3  expected{ 0.0F, 1.0F, 0.0F };
-  areVectorsEqual( transformed, expected );
+  are_vectors_equal( transformed, expected );
 }
 
 TEST_F( QuaternionTest, OneEightyDegreeRotationAroundY )
@@ -55,20 +55,20 @@ TEST_F( QuaternionTest, OneEightyDegreeRotationAroundY )
   Quat q{ 0.0F, 0.0F, 1.0F, 0.0F };
   Vec3 transformed = transform( v, q );
   Vec3 expected{ -1.0F, 0.0F, 0.0F };
-  areVectorsEqual( transformed, expected );
+  are_vectors_equal( transformed, expected );
 }
 
 TEST_F( QuaternionTest, TwoRotations )
 {
   Vec3 v{ 1.0F, 0.0F, 0.0F };
-  Quat q_z{ 0.0F, 0.0F, ONE_OVER_SQRT_TWO, ONE_OVER_SQRT_TWO };
-  Quat q_x{ ONE_OVER_SQRT_TWO, 0.0F, 0.0F, ONE_OVER_SQRT_TWO };
+  Quat q_z{ 0.0F, 0.0F, one_over_sqrt_two, one_over_sqrt_two };
+  Quat q_x{ one_over_sqrt_two, 0.0F, 0.0F, one_over_sqrt_two };
   Vec3 transformed = transform( v, q_z );
   transformed      = transform( v, q_x );
   Vec3 expected( 0.0F, 0.0F, 1.0F );
-  areVectorsEqual( transformed, expected );
+  are_vectors_equal( transformed, expected );
 
-  float deg_45 = PI / 4;
+  float deg_45 = pi / 4;
   float sin    = std::sin( deg_45 / 2.0F );
   float cos    = std::cos( deg_45 / 2.0F );
 
@@ -77,18 +77,18 @@ TEST_F( QuaternionTest, TwoRotations )
   Quat q_y45{ 0.0F, sin, 0.0F, cos };
 
   transformed = transform( v_x, q_z45 );
-  expected    = Vec3{ ONE_OVER_SQRT_TWO, ONE_OVER_SQRT_TWO, 0.0F };
-  areVectorsEqual( transformed, expected );
+  expected    = Vec3{ one_over_sqrt_two, one_over_sqrt_two, 0.0F };
+  are_vectors_equal( transformed, expected );
   transformed = transform( v_x, q_y45 );
-  expected    = Vec3{ ONE_OVER_SQRT_TWO, ONE_OVER_SQRT_TWO, ONE_OVER_SQRT_TWO };
-  areVectorsEqual( transformed, expected );
+  expected    = Vec3{ one_over_sqrt_two, one_over_sqrt_two, one_over_sqrt_two };
+  are_vectors_equal( transformed, expected );
 }
 
 TEST_F( QuaternionTest, SetRotationFromMatrix )
 {
   Mat3 identity = Mat3::identity();
   Quat quat{};
-  quat.setRotationFromMatrix( identity );
+  quat.set_rotation_from_matrix( identity );
   EXPECT_FLOAT_EQ( quat.w(), 1.0F );
   EXPECT_FLOAT_EQ( quat.x(), 0.0F );
   EXPECT_FLOAT_EQ( quat.y(), 0.0F );
@@ -97,12 +97,12 @@ TEST_F( QuaternionTest, SetRotationFromMatrix )
 
 TEST_F( QuaternionTest, NinetyDegreeZ )
 {
-  float angle    = M_PI / 2;
-  Mat3  rotation = makeRotationZ( angle );
+  float angle    = pi / 2;
+  Mat3  rotation = make_rotation_z( angle );
   Quat  quat{};
-  quat.setRotationFromMatrix( rotation );
-  EXPECT_FLOAT_EQ( quat.w(), ONE_OVER_SQRT_TWO );
+  quat.set_rotation_from_matrix( rotation );
+  EXPECT_FLOAT_EQ( quat.w(), one_over_sqrt_two );
   EXPECT_FLOAT_EQ( quat.x(), 0.0F );
   EXPECT_FLOAT_EQ( quat.y(), 0.0F );
-  EXPECT_FLOAT_EQ( quat.z(), ONE_OVER_SQRT_TWO );
+  EXPECT_FLOAT_EQ( quat.z(), one_over_sqrt_two );
 }

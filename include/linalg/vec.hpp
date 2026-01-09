@@ -8,58 +8,80 @@
 #include <cstddef>
 #include <format>
 #include <string>
-#include <type_traits>
 #include <utility>
 
 namespace linalg {
 
 template<typename T>
-concept Arithmetic = std::is_arithmetic_v<T>;
-
-template<typename T, size_t N, typename... Ts>
-concept VecParams = ( ... && std::same_as<T, Ts> ) && ( ( sizeof...( Ts ) == N ) );
+concept Arithmetic = std::integral<T> || std::floating_point<T>;
 
 template<typename T, size_t N>
   requires Arithmetic<T>
 class Vec
 {
 public:
-  using SizeType      = std::size_t;
-  using Iterator      = typename std::array<T, N>::iterator;
-  using ConstIterator = typename std::array<T, N>::const_iterator;
+  using value_type               = T;
+  static constexpr size_t length = N;
 
 private:
   std::array<T, N> m_data{};
 
-  template<size_t SubN, size_t... Is>
-  constexpr explicit Vec( const Vec<T, SubN>& other, T val, std::index_sequence<Is...> /*unused*/ )
-    : m_data{ other[Is]..., val }
+  template<typename U>
+  static constexpr bool is_compatible_scalar = std::same_as<U, T>;
+
+  template<typename U>
+  static constexpr bool is_compatible_vector = requires {
+    typename U::value_type;
+    { U::length } -> std::convertible_to<std::size_t>;
+    requires std::same_as<typename U::value_type, T>;
+  };
+
+  template<typename U>
+  static constexpr size_t arg_component_count()
+  {
+    if constexpr ( is_compatible_scalar<U> )
+    {
+      return 1;
+    } else if constexpr ( is_compatible_vector<U> )
+    {
+      return U::length;
+    } else
+    {
+      return 0;
+    }
+  }
+
+  template<size_t I, typename Arg0, typename... Args>
+  static constexpr T extract_arg( const Arg0& arg0, const Args&... args )
+  {
+    constexpr size_t s0 = arg_component_count<Arg0>();
+    if constexpr ( I < s0 )
+    {
+      if constexpr ( is_compatible_scalar<Arg0> )
+      {
+        return arg0;
+      } else
+      {
+        return arg0[I];
+      }
+    } else
+    {
+      return extract_arg<I - s0>( args... );
+    }
+  }
+
+  template<typename... Args, size_t... Is>
+  constexpr Vec( std::index_sequence<Is...> /*unused*/, const Args&... args ) : m_data{ extract_arg<Is>( args... )... }
   {}
 
 public:
   Vec() = default;
 
   template<typename... Args>
-    requires VecParams<T, N, Args...>
-  constexpr explicit Vec( Args... args ) : m_data{ args... }
+    requires( ( ... && (is_compatible_scalar<Args> || is_compatible_vector<Args>))
+              && ( ( ... + arg_component_count<Args>() ) == N ) )
+  constexpr Vec( const Args&... args ) : Vec( std::make_index_sequence<N>{}, args... )
   {}
-
-  template<size_t SubN, typename U>
-    requires( std::same_as<T, U> && ( SubN + 1 == N ) )
-  constexpr Vec( const Vec<T, SubN>& vec, U value ) : Vec( vec, value, std::make_index_sequence<SubN>{} )
-  {}
-
-  // Iterator support
-  constexpr Iterator      begin() { return m_data.begin(); }
-  constexpr ConstIterator begin() const { return m_data.begin(); }
-  constexpr ConstIterator cbegin() const { return m_data.cbegin(); }
-  constexpr Iterator      end() { return m_data.end(); }
-  constexpr ConstIterator end() const { return m_data.end(); }
-  constexpr ConstIterator cend() const { return m_data.cend(); }
-
-  [[nodiscard]] constexpr SizeType size() const { return N; }
-  [[nodiscard]] constexpr SizeType maxSize() const { return N; }
-  [[nodiscard]] constexpr bool     empty() const { return N == 0; }
 
   constexpr T& operator[]( size_t i )
   {
@@ -144,7 +166,7 @@ public:
   }
 
   template<size_t U>
-  [[nodiscard]] constexpr Vec<T, U> toSubVec() const
+  [[nodiscard]] constexpr Vec<T, U> to_sub_vec() const
     requires( U <= N )
   {
     Vec<T, U> result{};
@@ -156,7 +178,7 @@ public:
   }
 
   template<size_t U>
-  constexpr void setSubVec( const Vec<T, U>& sub )
+  constexpr void set_sub_vec( const Vec<T, U>& sub )
     requires( U <= N )
   {
     for ( size_t i = 0; i < U; ++i )
@@ -165,7 +187,7 @@ public:
     }
   }
 
-  void normalizeInPlace() { *this /= magnitude( *this ); }
+  void normalize_in_place() { *this /= magnitude( *this ); }
 
   explicit operator std::string() const
   {
@@ -256,7 +278,7 @@ template<typename T, size_t N>
 }
 
 template<typename T, size_t N>
-[[nodiscard]] constexpr T magnitudeSquared( const Vec<T, N>& vec )
+[[nodiscard]] constexpr T magnitude_squared( const Vec<T, N>& vec )
 {
   T result{};
   for ( size_t i = 0; i != N; ++i )
@@ -269,7 +291,7 @@ template<typename T, size_t N>
 template<typename T, size_t N>
 [[nodiscard]] inline T magnitude( const Vec<T, N>& vec )
 {
-  return std::sqrt( magnitudeSquared( vec ) );
+  return std::sqrt( magnitude_squared( vec ) );
 }
 
 template<typename T, size_t N>
@@ -311,9 +333,9 @@ template<typename T, size_t N>
 }
 
 template<typename T, size_t N>
-[[nodiscard]] inline bool isUnitVector( const Vec<T, N>& vec, const T epsilon = EPSILON )
+[[nodiscard]] inline bool is_unit_vector( const Vec<T, N>& vec, const T eps = epsilon )
 {
-  return std::abs( dot( vec, vec ) - UNIT ) < epsilon;
+  return std::abs( dot( vec, vec ) - unit ) < eps;
 }
 
 using Vec2  = Vec<float, 2>;

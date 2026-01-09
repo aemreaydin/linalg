@@ -3,8 +3,8 @@
 #include "linalg/mat.hpp"
 
 template<typename T, size_t N>
-static bool areMatricesEqual(
-  const linalg::Mat<T, N, N>& mat1, const linalg::Mat<T, N, N>& mat2, float tol = linalg::EPSILON )
+static bool are_matrices_equal(
+  const linalg::Mat<T, N, N>& mat1, const linalg::Mat<T, N, N>& mat2, float tol = linalg::epsilon )
 {
   for ( auto i = 0; i != N; ++i )
   {
@@ -20,7 +20,8 @@ static bool areMatricesEqual(
 }
 
 template<typename T, size_t N>
-static bool areVectorsEqual( const linalg::Vec<T, N>& vec1, const linalg::Vec<T, N>& vec2, float tol = linalg::EPSILON )
+static bool are_vectors_equal(
+  const linalg::Vec<T, N>& vec1, const linalg::Vec<T, N>& vec2, float tol = linalg::epsilon )
 {
   for ( auto i = 0; i != N; ++i )
   {

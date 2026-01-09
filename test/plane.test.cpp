@@ -62,14 +62,14 @@ TEST_F( PlaneTest, VectorNotPerpendicularToPlane )
 TEST_F( PlaneTest, Reflection )
 {
   Plane plane_non_origin{ 1.0F, 2.0F, 3.0F, 14.0F };
-  plane_non_origin.normalizeInPlace();
+  plane_non_origin.normalize_in_place();
   Plane plane_origin{ 1.0F, 2.0F, 3.0F, 0.0F };
-  plane_origin.normalizeInPlace();
+  plane_origin.normalize_in_place();
 
   Point3 point{ 2.0F, 4.0F, 6.0F };
 
-  Point3 reflected_non_origin = makeReflection( plane_non_origin ) * point;
-  Point3 reflected_origin     = makeReflection( plane_origin ) * point;
+  Point3 reflected_non_origin = make_reflection( plane_non_origin ) * point;
+  Point3 reflected_origin     = make_reflection( plane_origin ) * point;
 
   EXPECT_FLOAT_EQ( reflected_non_origin.x(), -4.0F );
   EXPECT_FLOAT_EQ( reflected_non_origin.y(), -8.0F );
@@ -88,7 +88,7 @@ TEST_F( PlaneTest, PlaneAndLineParallel )
     Vec3{ 1.0F, 0.0F, 1.0F }
   };
 
-  std::optional<Point3> intersection = getIntersection( plane, line );
+  std::optional<Point3> intersection = get_intersection( plane, line );
   ASSERT_FALSE( intersection );
 }
 
@@ -100,7 +100,7 @@ TEST_F( PlaneTest, LineIntersectsPlane )
     Vec3{ 0.0F, 1.0F, 0.0F }
   };
 
-  auto opt_intersection = getIntersection( plane, line );
+  auto opt_intersection = get_intersection( plane, line );
   ASSERT_TRUE( opt_intersection.has_value() );
   EXPECT_FLOAT_EQ( opt_intersection->x(), 1.0F );
   EXPECT_FLOAT_EQ( opt_intersection->y(), 5.0F );
@@ -113,7 +113,7 @@ TEST_F( PlaneTest, ThreePlanesIntersection )
   Plane plane_b{ 1.0F, 1.0F, 1.0F, 1.0F };
   Plane plane_c{ 2.0F, 3.0F, 2.0F, 1.0F };
 
-  auto opt_point = getIntersection( plane_a, plane_b, plane_c );
+  auto opt_point = get_intersection( plane_a, plane_b, plane_c );
   ASSERT_TRUE( opt_point.has_value() );
 
   EXPECT_FLOAT_EQ( opt_point->x(), 0.0F );
@@ -127,7 +127,7 @@ TEST_F( PlaneTest, ThreePlanesNotLinearlyIndependent )
   Plane plane_b{ 1.0F, 1.0F, 1.0F, 1.0F };
   Plane plane_c{ 2.0F, 3.0F, 2.0F, 1.0F };
 
-  auto opt_point = getIntersection( plane_a, plane_b, plane_c );
+  auto opt_point = get_intersection( plane_a, plane_b, plane_c );
   ASSERT_FALSE( opt_point.has_value() );
 }
 
@@ -136,7 +136,7 @@ TEST_F( PlaneTest, TwoPlanesIntersection )
   Plane plane_a{ 2.0F, -1.0F, 1.0F, -1.0F };
   Plane plane_b{ 1.0F, 1.0F, 1.0F, -6.0F };
 
-  auto opt_line = getIntersection( plane_a, plane_b );
+  auto opt_line = get_intersection( plane_a, plane_b );
   ASSERT_TRUE( opt_line.has_value() );
 
   EXPECT_FLOAT_EQ( opt_line->point().x(), 16.0F / 14.0F );

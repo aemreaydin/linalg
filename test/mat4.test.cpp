@@ -3,6 +3,8 @@
 #include <gtest/gtest-death-test.h>
 #include <gtest/gtest.h>
 
+#include <cmath>
+
 using namespace linalg;
 
 class Mat4Test : public ::testing::Test
@@ -16,14 +18,13 @@ protected:
   void SetUp() override
   {
 
-    const float pi    = 3.14159265F;
-    float       angle = pi / 2;
-    rotation          = Mat4{ static_cast<float>( cos( angle ) ),
-      static_cast<float>( -sin( angle ) ),
+    float angle = pi / 2;
+    rotation    = Mat4{ std::cos( angle ),
+      -std::sin( angle ),
       0.0F,
       0.0F,
-      static_cast<float>( sin( angle ) ),
-      static_cast<float>( cos( angle ) ),
+      std::sin( angle ),
+      std::cos( angle ),
       0.0F,
       0.0F,
       0.0F,
@@ -141,28 +142,28 @@ TEST_F( Mat4Test, HandlesMatrixMultiplicationByVector )
 TEST_F( Mat4Test, InverseOfIdentity )
 {
   auto inv = inverse( identity );
-  areMatricesEqual( inv, identity );
+  are_matrices_equal( inv, identity );
 }
 
 TEST_F( Mat4Test, InverseOfScaling )
 {
   auto inv = inverse( scaling );
   Mat4 expected_inverse{ 0.5F, 0.F, 0.F, 0.F, 0.F, 0.333333F, 0.F, 0.F, 0.F, 0.F, 0.25F, 0.F, 0.F, 0.F, 0.F, 1.F };
-  areMatricesEqual( inv, expected_inverse );
+  are_matrices_equal( inv, expected_inverse );
 }
 
 TEST_F( Mat4Test, InverseOfRotation )
 {
   auto inv              = inverse( rotation );
   Mat4 expected_inverse = transpose( rotation );
-  areMatricesEqual( inv, expected_inverse );
+  are_matrices_equal( inv, expected_inverse );
 }
 
 TEST_F( Mat4Test, InverseOfTranslation )
 {
   auto inv = inverse( translation );
   Mat4 expected_inverse{ 1.F, 0.F, 0.F, -1.F, 0.F, 1.F, 0.F, -2.F, 0.F, 0.F, 1.F, -3.F, 0.F, 0.F, 0.F, 1.F };
-  areMatricesEqual( inv, expected_inverse );
+  are_matrices_equal( inv, expected_inverse );
 }
 
 TEST_F( Mat4Test, DefaultConstructor )
@@ -197,7 +198,7 @@ TEST_F( Mat4Test, AdditionOperator )
   Mat4 expected = {
     2.0F, 3.0F, 4.0F, 5.0F, 6.0F, 7.0F, 8.0F, 9.0F, 10.0F, 11.0F, 12.0F, 13.0F, 14.0F, 15.0F, 16.0F, 17.0F
   };
-  EXPECT_TRUE( areMatricesEqual( result, expected ) );
+  EXPECT_TRUE( are_matrices_equal( result, expected ) );
 }
 
 TEST_F( Mat4Test, SubtractionOperator )
@@ -208,7 +209,7 @@ TEST_F( Mat4Test, SubtractionOperator )
   Mat4 expected = {
     1.0F, 2.0F, 3.0F, 4.0F, 5.0F, 6.0F, 7.0F, 8.0F, 9.0F, 10.0F, 11.0F, 12.0F, 13.0F, 14.0F, 15.0F, 16.0F
   };
-  EXPECT_TRUE( areMatricesEqual( result, expected ) );
+  EXPECT_TRUE( are_matrices_equal( result, expected ) );
 }
 
 TEST_F( Mat4Test, ScalarMultiplication )
@@ -218,7 +219,7 @@ TEST_F( Mat4Test, ScalarMultiplication )
   Mat4 expected{
     2.0F, 4.0F, 6.0F, 8.0F, 10.0F, 12.0F, 14.0F, 16.0F, 18.0F, 20.0F, 22.0F, 24.0F, 26.0F, 28.0F, 30.0F, 32.0F
   };
-  EXPECT_TRUE( areMatricesEqual( result, expected ) );
+  EXPECT_TRUE( are_matrices_equal( result, expected ) );
 }
 
 TEST_F( Mat4Test, ScalarDivision )
@@ -228,7 +229,7 @@ TEST_F( Mat4Test, ScalarDivision )
   Mat4 expected{
     1.0F, 2.0F, 3.0F, 4.0F, 5.0F, 6.0F, 7.0F, 8.0F, 9.0F, 10.0F, 11.0F, 12.0F, 13.0F, 14.0F, 15.0F, 16.0F
   };
-  EXPECT_TRUE( areMatricesEqual( result, expected ) );
+  EXPECT_TRUE( are_matrices_equal( result, expected ) );
 }
 
 TEST_F( Mat4Test, Transpose )
@@ -250,7 +251,7 @@ TEST_F( Mat4Test, InverseTimesOriginalIsIdentity )
   Mat4 inv    = inverse( a );
   Mat4 result = a * inv;
   Mat4 id     = Mat4::identity();
-  EXPECT_TRUE( areMatricesEqual( result, id, 1e-5F ) );
+  EXPECT_TRUE( are_matrices_equal( result, id, 1e-5F ) );
 }
 
 TEST_F( Mat4Test, UnaryNegation )

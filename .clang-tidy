@@ -1,5 +1,5 @@
 Checks: >
-  *, -cppcoreguidelines-avoid-magic-numbers, -cppcoreguidelines-pro-type-vararg, -cppcoreguidelines-avoid-c-arrays, -cppcoreguidelines-avoid-non-const-global-variables, -cppcoreguidelines-pro-bounds-pointer-arithmetic, -fuchsia-*, -google-*, -hicpp-no-array-decay, -hicpp-avoid-c-arrays, -llvm-header-guard, -llvm-include-order, -misc-no-recursion, -modernize-use-trailing-return-type, -readability-magic-numbers, -cert-*, -misc-*, -llvm*, -hicpp-*, -altera-*, -bugprone-easily-swappable-parameters, -cppcoreguidelines-non-private-member-variables-in-classes, -readability-identifier-length, -cppcoreguidelines-pro-type-reinterpret-cast, -cppcoreguidelines-pro-bounds-constant-array-index, -portability-avoid-pragma-once, -readability-math-missing-parentheses
+  *, -cppcoreguidelines-owning-memory, -cppcoreguidelines-avoid-magic-numbers, -cppcoreguidelines-pro-type-vararg, -cppcoreguidelines-avoid-c-arrays, -cppcoreguidelines-avoid-non-const-global-variables, -cppcoreguidelines-pro-bounds-pointer-arithmetic, -fuchsia-*, -google-*, -hicpp-no-array-decay, -hicpp-avoid-c-arrays, -llvm-header-guard, -llvm-include-order, -misc-no-recursion, -modernize-use-trailing-return-type, -readability-magic-numbers, -cert-*, -misc-*, -llvm*, -hicpp-*, -altera-*, -bugprone-easily-swappable-parameters, -cppcoreguidelines-non-private-member-variables-in-classes, -readability-identifier-length, -cppcoreguidelines-pro-type-reinterpret-cast, -cppcoreguidelines-pro-bounds-constant-array-index, -portability-avoid-pragma-once, -readability-math-missing-parentheses
 
 CheckOptions:
   - key: modernize-use-auto.MinTypeNameLength
@@ -9,34 +9,24 @@ CheckOptions:
   - key: readability-function-size.ParameterThreshold
     value: "16"
   - key: readability-identifier-naming.NamespaceCase
-    value: camelBack
+    value: lower_case
   - key: readability-identifier-naming.ClassCase
     value: CamelCase
   - key: readability-identifier-naming.StructCase
     value: CamelCase
   - key: readability-identifier-naming.FunctionCase
-    value: camelBack
+    value: lower_case
   - key: readability-identifier-naming.VariableCase
     value: lower_case
   - key: readability-identifier-naming.PublicMemberCase
-    value: camelBack
+    value: lower_case
   - key: readability-identifier-naming.PrivateMemberCase
-    value: camelBack
+    value: lower_case
   - key: readability-identifier-naming.PrivateMemberPrefix
     value: "m_"
-  - key: readability-identifier-naming.GlobalConstantCase
-    value: UPPER_CASE
-  - key: readability-identifier-naming.EnumCase
-    value: UPPER_CASE
-  - key: readability-identifier-naming.EnumConstantCase
-    value: UPPER_CASE
-  - key: readability-identifier-naming.StaticConstantCase
-    value: UPPER_CASE
-  - key: readability-identifier-naming.TypeAliasCase
-    value: CamelCase
-  - key: readability-identifier-naming.TypeTemplateParameterCase
-    value: CamelCase
+  - key: readability-identifier-naming.ConstexprVariableCase
+    value: lower_case
   - key: readability-identifier-naming.ConceptCase
     value: CamelCase
 WarningsAsErrors: "*"
-HeaderFilterRegex: "*"
+HeaderFilterRegex: "include/|test/"

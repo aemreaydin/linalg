@@ -12,11 +12,11 @@ class Plane : public Vec4
 public:
   using Vec4::Vec4;
 
-  [[nodiscard]] constexpr Vec3 getNormal() const { return toSubVec<3>(); }
+  [[nodiscard]] constexpr Vec3 get_normal() const { return to_sub_vec<3>(); }
 
-  void normalizeInPlace()
+  void normalize_in_place()
   {
-    float mag = magnitude( getNormal() );
+    float mag = magnitude( get_normal() );
     *this /= mag;
   }
 };
@@ -41,7 +41,7 @@ public:
   };
 }
 
-[[nodiscard]] constexpr Transform4 makeReflection( const Plane& plane )
+[[nodiscard]] constexpr Transform4 make_reflection( const Plane& plane )
 {
   float nx_sq = -2.0F * plane.x() * plane.x();
   float ny_sq = -2.0F * plane.y() * plane.y();
@@ -69,36 +69,36 @@ public:
   };
 }
 
-[[nodiscard]] constexpr std::optional<Point3> getIntersection( const Plane& plane, const Line& line )
+[[nodiscard]] constexpr std::optional<Point3> get_intersection( const Plane& plane, const Line& line )
 {
   float fp = dot( plane, line.point() );
   float fv = dot( plane, line.vector() );
-  return std::fabs( fv ) > FLOAT_MIN ? std::optional{ line.point() - ( fp / fv ) * line.vector() } : std::nullopt;
+  return std::fabs( fv ) > float_min ? std::optional{ line.point() - ( fp / fv ) * line.vector() } : std::nullopt;
 }
 
-[[nodiscard]] constexpr std::optional<Point3> getIntersection( const Plane& a, const Plane& b, const Plane& c )
+[[nodiscard]] constexpr std::optional<Point3> get_intersection( const Plane& a, const Plane& b, const Plane& c )
 {
-  const Vec3& na = a.getNormal();
-  const Vec3& nb = b.getNormal();
-  const Vec3& nc = c.getNormal();
+  const Vec3& na = a.get_normal();
+  const Vec3& nb = b.get_normal();
+  const Vec3& nc = c.get_normal();
 
   Vec3  cross_na_nb           = cross( na, nb );
   float scalar_triple_product = dot( cross_na_nb, nc );
 
-  return std::fabs( scalar_triple_product ) > FLOAT_MIN
+  return std::fabs( scalar_triple_product ) > float_min
            ? std::optional{ ( a.w() * cross( nc, nb ) + b.w() * cross( na, nc ) - c.w() * cross_na_nb )
                             / scalar_triple_product }
            : std::nullopt;
 }
 
-[[nodiscard]] constexpr std::optional<Line> getIntersection( const Plane& a, const Plane& b )
+[[nodiscard]] constexpr std::optional<Line> get_intersection( const Plane& a, const Plane& b )
 {
-  const Vec3& na = a.getNormal();
-  const Vec3& nb = b.getNormal();
+  const Vec3& na = a.get_normal();
+  const Vec3& nb = b.get_normal();
 
   const Vec3& vec                   = cross( na, nb );
   float       scalar_triple_product = dot( vec, vec );
-  if ( std::fabs( scalar_triple_product ) > FLOAT_MIN )
+  if ( std::fabs( scalar_triple_product ) > float_min )
   {
     Point3 point{ ( a.w() * cross( vec, nb ) + b.w() * cross( na, vec ) ) / scalar_triple_product };
     return std::optional{

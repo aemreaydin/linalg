@@ -12,7 +12,7 @@ protected:
 
   void SetUp() override
   {
-    testLine = Line{
+    testLine = {
       Point3{ 1.0F, 2.0F, 3.0F },
       Vec3{ 4.0F, 5.0F, 6.0F }
     };
@@ -52,7 +52,7 @@ TEST_F( LineTest, DistanceFromLine )
     Vec3{ 1.0F, 0.0F, 0.0F }
   };
   Vec3  point{ 4.0F, 5.0F, 6.0F };
-  float expected_distance   = 3 * std::sqrt( 2.0F );
+  float expected_distance   = 3 * std::numbers::sqrt2_v<float>;
   float calculated_distance = distance( point, line );
   EXPECT_FLOAT_EQ( calculated_distance, expected_distance );
 
@@ -61,7 +61,7 @@ TEST_F( LineTest, DistanceFromLine )
     Vec3{ -2.0F, 2.0F, 2.0F }
   };
   point               = Vec3{ -8.0F, 9.0F, 9.0F };
-  expected_distance   = std::sqrt( 2.0F );
+  expected_distance   = std::numbers::sqrt2_v<float>;
   calculated_distance = distance( point, line );
   EXPECT_FLOAT_EQ( calculated_distance, expected_distance );
 }

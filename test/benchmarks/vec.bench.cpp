@@ -3,7 +3,7 @@
 
 using namespace linalg;
 
-static void BM_Vec3Dot( benchmark::State& state )
+static void bm_vec3_dot( benchmark::State& state )
 {
   Vec3 a{ 1.0F, 2.0F, 3.0F };
   Vec3 b{ 4.0F, 5.0F, 6.0F };
@@ -12,9 +12,9 @@ static void BM_Vec3Dot( benchmark::State& state )
     benchmark::DoNotOptimize( dot( a, b ) );
   }
 }
-BENCHMARK( BM_Vec3Dot );
+BENCHMARK( bm_vec3_dot );
 
-static void BM_Vec3Cross( benchmark::State& state )
+static void bm_vec3_cross( benchmark::State& state )
 {
   Vec3 a{ 1.0F, 2.0F, 3.0F };
   Vec3 b{ 4.0F, 5.0F, 6.0F };
@@ -23,9 +23,9 @@ static void BM_Vec3Cross( benchmark::State& state )
     benchmark::DoNotOptimize( cross( a, b ) );
   }
 }
-BENCHMARK( BM_Vec3Cross );
+BENCHMARK( bm_vec3_cross );
 
-static void BM_Vec3Normalize( benchmark::State& state )
+static void bm_vec3_normalize( benchmark::State& state )
 {
   Vec3 v{ 1.0F, 2.0F, 3.0F };
   for ( auto _ : state )
@@ -33,9 +33,9 @@ static void BM_Vec3Normalize( benchmark::State& state )
     benchmark::DoNotOptimize( normalized( v ) );
   }
 }
-BENCHMARK( BM_Vec3Normalize );
+BENCHMARK( bm_vec3_normalize );
 
-static void BM_Vec3Magnitude( benchmark::State& state )
+static void bm_vec3_magnitude( benchmark::State& state )
 {
   Vec3 v{ 1.0F, 2.0F, 3.0F };
   for ( auto _ : state )
@@ -43,9 +43,9 @@ static void BM_Vec3Magnitude( benchmark::State& state )
     benchmark::DoNotOptimize( magnitude( v ) );
   }
 }
-BENCHMARK( BM_Vec3Magnitude );
+BENCHMARK( bm_vec3_magnitude );
 
-static void BM_Vec3Addition( benchmark::State& state )
+static void bm_vec3_addition( benchmark::State& state )
 {
   Vec3 a{ 1.0F, 2.0F, 3.0F };
   Vec3 b{ 4.0F, 5.0F, 6.0F };
@@ -54,9 +54,9 @@ static void BM_Vec3Addition( benchmark::State& state )
     benchmark::DoNotOptimize( a + b );
   }
 }
-BENCHMARK( BM_Vec3Addition );
+BENCHMARK( bm_vec3_addition );
 
-static void BM_Vec4Dot( benchmark::State& state )
+static void bm_vec4_dot( benchmark::State& state )
 {
   Vec4 a{ 1.0F, 2.0F, 3.0F, 4.0F };
   Vec4 b{ 5.0F, 6.0F, 7.0F, 8.0F };
@@ -65,9 +65,9 @@ static void BM_Vec4Dot( benchmark::State& state )
     benchmark::DoNotOptimize( dot( a, b ) );
   }
 }
-BENCHMARK( BM_Vec4Dot );
+BENCHMARK( bm_vec4_dot );
 
-static void BM_Vec4Normalize( benchmark::State& state )
+static void bm_vec4_normalize( benchmark::State& state )
 {
   Vec4 v{ 1.0F, 2.0F, 3.0F, 4.0F };
   for ( auto _ : state )
@@ -75,4 +75,4 @@ static void BM_Vec4Normalize( benchmark::State& state )
     benchmark::DoNotOptimize( normalized( v ) );
   }
 }
-BENCHMARK( BM_Vec4Normalize );
+BENCHMARK( bm_vec4_normalize );

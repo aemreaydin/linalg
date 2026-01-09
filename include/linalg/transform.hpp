@@ -26,25 +26,25 @@ public:
   {}
 
   constexpr Transform4( const Vec3& v00, const Vec3& v01, const Vec3& v02, const Point3& p03 )
-    : Mat4( { v00, 0.0F }, { v01, 0.0F }, { v02, 0.0F }, { p03, 1.0F } )
+    : Mat4( Vec4( v00, 0.0F ), Vec4( v01, 0.0F ), Vec4( v02, 0.0F ), Vec4( p03, 1.0F ) )
   {}
 
   constexpr Transform4( const Mat4& mat ) : Mat4( mat ) {}
 
-  [[nodiscard]] constexpr Vec3 getColumn3( size_t i ) const
+  [[nodiscard]] constexpr Vec3 get_column3( size_t i ) const
   {
     const Vec4& vec4 = Mat4::operator[]( i );
-    return vec4.toSubVec<3>();
+    return vec4.to_sub_vec<3>();
   }
 
-  [[nodiscard]] constexpr Vec3 operator[]( size_t i ) const { return getColumn3( i ); }
+  [[nodiscard]] constexpr Vec3 operator[]( size_t i ) const { return get_column3( i ); }
 
-  [[nodiscard]] constexpr Point3 getTranslation() const
+  [[nodiscard]] constexpr Point3 get_translation() const
   {
     return Point3{ ( *this )( 0, 3 ), ( *this )( 1, 3 ), ( *this )( 2, 3 ) };
   }
 
-  constexpr void setTranslation( const Point3& point )
+  constexpr void set_translation( const Point3& point )
   {
     ( *this )( 0, 3 ) = point.x();
     ( *this )( 1, 3 ) = point.y();
@@ -104,7 +104,7 @@ public:
   };
 }
 
-[[nodiscard]] constexpr Vec3 transformNormal( const Vec3& normal, const Transform4& t )
+[[nodiscard]] constexpr Vec3 transform_normal( const Vec3& normal, const Transform4& t )
 {
   return Vec3{
     normal.x() * t( 0, 0 ) + normal.y() * t( 1, 0 ) + normal.z() * t( 2, 0 ),
@@ -115,7 +115,7 @@ public:
 
 [[nodiscard]] constexpr Vec3 operator*( const Vec3& normal_vec, const Transform4& t )
 {
-  return transformNormal( normal_vec, t );
+  return transform_normal( normal_vec, t );
 }
 
 } // namespace linalg

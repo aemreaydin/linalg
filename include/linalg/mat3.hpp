@@ -55,7 +55,7 @@ public:
   return Mat3{ b_cross_c, c_cross_a, a_cross_b } / scalar_cross;
 }
 
-[[nodiscard]] inline Mat3 makeRotationX( float t )
+[[nodiscard]] inline Mat3 make_rotation_x( float t )
 {
   auto c = std::cos( t );
   auto s = std::sin( t );
@@ -63,7 +63,7 @@ public:
   return Mat3{ 1.0F, 0.0F, 0.0F, 0.0F, c, -s, 0.0F, s, c };
 }
 
-[[nodiscard]] inline Mat3 makeRotationY( float t )
+[[nodiscard]] inline Mat3 make_rotation_y( float t )
 {
   auto c = std::cos( t );
   auto s = std::sin( t );
@@ -71,7 +71,7 @@ public:
   return Mat3{ c, 0.0F, s, 0.0F, 1.0F, 0.0F, -s, 0.0F, c };
 }
 
-[[nodiscard]] inline Mat3 makeRotationZ( float t )
+[[nodiscard]] inline Mat3 make_rotation_z( float t )
 {
   auto c = std::cos( t );
   auto s = std::sin( t );
@@ -79,7 +79,7 @@ public:
   return Mat3{ c, -s, 0.0F, s, c, 0.0F, 0.0F, 0.0F, 1.0F };
 }
 
-[[nodiscard]] inline Mat3 makeRotation( float t, const Vec3& a )
+[[nodiscard]] inline Mat3 make_rotation( float t, const Vec3& a )
 {
   auto c           = std::cos( t );
   auto s           = std::sin( t );
@@ -104,7 +104,7 @@ public:
     c + z * a.z() };
 }
 
-[[nodiscard]] constexpr Mat3 makeReflection( const Vec3& a )
+[[nodiscard]] constexpr Mat3 make_reflection( const Vec3& a )
 {
   auto x = -2.0F * a.x();
   auto y = -2.0F * a.y();
@@ -117,14 +117,14 @@ public:
   return Mat3{ 1.0F + x * a.x(), axay, axaz, axay, 1.0F + y * a.y(), ayaz, axaz, ayaz, 1.0F + z * a.z() };
 }
 
-[[nodiscard]] constexpr Mat3 makeInvolution( const Vec3& a ) { return -makeReflection( a ); }
+[[nodiscard]] constexpr Mat3 make_involution( const Vec3& a ) { return -make_reflection( a ); }
 
-[[nodiscard]] constexpr Mat3 makeScale( float sx, float sy, float sz )
+[[nodiscard]] constexpr Mat3 make_scale( float sx, float sy, float sz )
 {
   return Mat3{ sx, 0.0F, 0.0F, 0.0F, sy, 0.0F, 0.0F, 0.0F, sz };
 }
 
-[[nodiscard]] constexpr Mat3 makeScale( float s, const Vec3& a )
+[[nodiscard]] constexpr Mat3 make_scale( float s, const Vec3& a )
 {
   s -= 1.0F;
   auto x = s * a.x();
@@ -138,7 +138,7 @@ public:
   return Mat3{ x * a.x() + 1.0F, axay, axaz, axay, y * a.y() + 1.0F, ayaz, axaz, ayaz, z * a.z() + 1.0F };
 }
 
-[[nodiscard]] inline Mat3 makeSkew( float t, const Vec3& skew_direction, const Vec3& projected )
+[[nodiscard]] inline Mat3 make_skew( float t, const Vec3& skew_direction, const Vec3& projected )
 {
   t      = std::tan( t );
   auto x = skew_direction.x() * t;

@@ -200,9 +200,9 @@ TEST_F( Vec3Test, ProjectionAndRejection )
 
 TEST_F( Vec3Test, CheckUnitVector )
 {
-  const float inv_sqrt3 = 1.0F / std::sqrt( 3.0F );
+  const float inv_sqrt3 = std::numbers::inv_sqrt3_v<float>;
   Vec3        unit_vec{ inv_sqrt3, inv_sqrt3, inv_sqrt3 };
-  EXPECT_TRUE( isUnitVector( unit_vec ) );
+  EXPECT_TRUE( is_unit_vector( unit_vec ) );
   Vec3 non_unit_vec{ 1.0F, 2.0F, 3.0F };
-  EXPECT_FALSE( isUnitVector( non_unit_vec ) );
+  EXPECT_FALSE( is_unit_vector( non_unit_vec ) );
 }

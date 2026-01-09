@@ -10,8 +10,8 @@ class Quaternion : public Vec4
 public:
   using Vec4::Vec;
 
-  [[nodiscard]] constexpr Vec3 getVector() const { return toSubVec<3>(); }
-  [[nodiscard]] constexpr Mat3 getRotationMatrix()
+  [[nodiscard]] constexpr Vec3 get_vector() const { return to_sub_vec<3>(); }
+  [[nodiscard]] constexpr Mat3 get_rotation_matrix()
   {
     float x2 = x() * x();
     float y2 = y() * y();
@@ -34,7 +34,7 @@ public:
       1.0F - 2.0F * x2 - 2.0F * y2 };
   }
 
-  void setRotationFromMatrix( const Mat3& rotation_mat )
+  void set_rotation_from_matrix( const Mat3& rotation_mat )
   {
     float m00 = rotation_mat( 0, 0 );
     float m11 = rotation_mat( 1, 1 );
@@ -89,9 +89,9 @@ public:
 
 [[nodiscard]] constexpr Vec3 transform( const Vec3& vec, const Quaternion& quat )
 {
-  const Vec3& b         = quat.getVector();
+  const Vec3& b         = quat.get_vector();
   const float c         = quat.w();
-  const float b_squared = magnitudeSquared( b );
+  const float b_squared = magnitude_squared( b );
 
   return ( c * c - b_squared ) * vec + 2.0F * dot( vec, b ) * b + 2.0F * c * cross( b, vec );
 }

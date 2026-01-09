@@ -45,10 +45,10 @@ public:
 
 [[nodiscard]] constexpr Mat4 inverse( const Mat4& mat )
 {
-  const Vec3 a = mat[0].toSubVec<3>();
-  const Vec3 b = mat[1].toSubVec<3>();
-  const Vec3 c = mat[2].toSubVec<3>();
-  const Vec3 d = mat[3].toSubVec<3>();
+  const Vec3 a = mat[0].to_sub_vec<3>();
+  const Vec3 b = mat[1].to_sub_vec<3>();
+  const Vec3 c = mat[2].to_sub_vec<3>();
+  const Vec3 d = mat[3].to_sub_vec<3>();
 
   const float x = mat( 3, 0 );
   const float y = mat( 3, 1 );

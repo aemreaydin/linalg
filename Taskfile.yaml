@@ -2,7 +2,7 @@ version: "3"
 
 vars:
   BUILD_TYPE: '{{default "Debug" .BUILD_TYPE}}'
-  BENCHMARKS: '{{default "OFF" .BENCHMARKS}}'
+  BENCHMARKS: '{{default "ON" .BENCHMARKS}}'
 
 tasks:
   configure:
@@ -49,12 +49,11 @@ tasks:
     vars: { BUILD_TYPE: "Debug" }
     deps: [configure]
     cmds:
-      - find include \( -name "*.cpp" -o -name "*.hpp" \) -print0 | xargs -0 clang-tidy -p build/{{.BUILD_TYPE}} -fix
+      - find include \( -name "*.cpp" -o -name "*.hpp" \) -print0 | xargs -0 clang-tidy -p build/{{.BUILD_TYPE}} -fix --extra-arg="-std=c++23"
 
   tidy-check:
     desc: Run clang-tidy static analysis. Treats warnings as errors. Try to fix the errors.
     vars: { BUILD_TYPE: "Debug" }
     deps: [configure]
     cmds:
-      - find include \( -name "*.cpp" -o -name "*.hpp" \) -print0 | xargs -0 clang-tidy -p build/{{.BUILD_TYPE}}
-
+      - find include \( -name "*.cpp" -o -name "*.hpp" \) -print0 | xargs -0 clang-tidy -p build/{{.BUILD_TYPE}} --extra-arg="-std=c++23"

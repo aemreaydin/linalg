@@ -1,5 +1,6 @@
 #include "linalg/mat3.hpp"
 #include "test_utils.hpp"
+#include <cmath>
 #include <gtest/gtest-death-test.h>
 #include <gtest/gtest.h>
 
@@ -79,7 +80,7 @@ TEST_F( Mat3Test, UnaryNegation )
     Vec3{ -7.0F, 8.0F, -9.0F }
   };
 
-  EXPECT_TRUE( areMatricesEqual( negated, expected ) );
+  EXPECT_TRUE( are_matrices_equal( negated, expected ) );
 }
 
 TEST_F( Mat3Test, HandlesIndexOperator )
@@ -227,50 +228,50 @@ TEST_F( Mat3Test, Inverse )
 
 TEST_F( Mat3Test, RotationX )
 {
-  float angle  = M_PI / 4;
-  auto  result = makeRotationX( angle );
+  float angle  = pi / 4;
+  auto  result = make_rotation_x( angle );
   Mat3  expected{
     1.0F, 0.0F, 0.0F, 0.0F, std::cos( angle ), -std::sin( angle ), 0.0F, std::sin( angle ), std::cos( angle )
   };
-  EXPECT_TRUE( areMatricesEqual( result, expected ) );
+  EXPECT_TRUE( are_matrices_equal( result, expected ) );
 }
 
 TEST_F( Mat3Test, RotationY )
 {
-  float angle  = M_PI / 4;
-  auto  result = makeRotationY( angle );
+  float angle  = pi / 4;
+  auto  result = make_rotation_y( angle );
   Mat3  expected{
     std::cos( angle ), 0.0F, std::sin( angle ), 0.0F, 1.0F, 0.0F, -std::sin( angle ), 0.0F, std::cos( angle )
   };
-  EXPECT_TRUE( areMatricesEqual( result, expected ) );
+  EXPECT_TRUE( are_matrices_equal( result, expected ) );
 }
 
 TEST_F( Mat3Test, RotationZ )
 {
-  float angle  = M_PI / 4;
-  auto  result = makeRotationZ( angle );
+  float angle  = pi / 4;
+  auto  result = make_rotation_z( angle );
   Mat3  expected{
     std::cos( angle ), -std::sin( angle ), 0.0F, std::sin( angle ), std::cos( angle ), 0.0F, 0.0F, 0.0F, 1.0F
   };
-  EXPECT_TRUE( areMatricesEqual( result, expected ) );
+  EXPECT_TRUE( are_matrices_equal( result, expected ) );
 }
 
 TEST_F( Mat3Test, GeneralRotation )
 {
-  float       angle     = M_PI / 4;
-  const float inv_sqrt3 = 1.0F / std::sqrt( 3.0F );
+  float       angle     = pi / 4;
+  const float inv_sqrt3 = std::numbers::inv_sqrt3_v<float>;
   Vec3        axis{ inv_sqrt3, inv_sqrt3, inv_sqrt3 };
-  auto        result = makeRotation( angle, axis );
+  auto        result = make_rotation( angle, axis );
   Mat3        expected{
     0.8047379F, -0.3106172F, 0.5058793F, 0.5058793F, 0.8047379F, -0.3106172F, -0.3106172F, 0.5058793F, 0.8047379F
   };
-  EXPECT_TRUE( areMatricesEqual( result, expected ) );
+  EXPECT_TRUE( are_matrices_equal( result, expected ) );
 }
 
 TEST_F( Mat3Test, ReflectionMatrix )
 {
   Vec3 inv{ 1.0F, 0.0F, 0.0F };
-  auto reflection = makeReflection( inv );
+  auto reflection = make_reflection( inv );
   Vec3 vec{ 1.0F, 1.0F, 1.0F };
   auto reflected_v = reflection * vec;
   EXPECT_FLOAT_EQ( reflected_v.x(), -1.0F );
@@ -281,7 +282,7 @@ TEST_F( Mat3Test, ReflectionMatrix )
 TEST_F( Mat3Test, InvolutionMatrix )
 {
   Vec3 inv{ 1.0F, 0.0F, 0.0F };
-  auto involution = makeInvolution( inv );
+  auto involution = make_involution( inv );
   Vec3 vec{ 1.0F, 1.0F, 1.0F };
   auto involuted_v = involution * vec;
   EXPECT_FLOAT_EQ( involuted_v.x(), 1.0F );
@@ -292,14 +293,14 @@ TEST_F( Mat3Test, InvolutionMatrix )
 TEST_F( Mat3Test, Scale )
 {
   Vec3 vec{ 2.0F, 3.0F, 5.0F };
-  Mat3 scale = makeScale( 2.0F, 2.0F, 2.0F );
+  Mat3 scale = make_scale( 2.0F, 2.0F, 2.0F );
 
   auto scaled_vec = scale * vec;
   EXPECT_FLOAT_EQ( scaled_vec.x(), 4.0F );
   EXPECT_FLOAT_EQ( scaled_vec.y(), 6.0F );
   EXPECT_FLOAT_EQ( scaled_vec.z(), 10.0F );
 
-  scale      = makeScale( 2.0F, 3.0F, 4.0F );
+  scale      = make_scale( 2.0F, 3.0F, 4.0F );
   scaled_vec = scale * vec;
   EXPECT_FLOAT_EQ( scaled_vec.x(), 4.0F );
   EXPECT_FLOAT_EQ( scaled_vec.y(), 9.0F );
@@ -309,7 +310,7 @@ TEST_F( Mat3Test, Scale )
 TEST_F( Mat3Test, ScaleOnArbitraryAxis )
 {
   Vec3 vec{ 2.0F, 3.0F, 3.0F };
-  Mat3 scale      = makeScale( 3.0F, Vec3{ 0.0F, 1.0F, 0.0F } );
+  Mat3 scale      = make_scale( 3.0F, Vec3{ 0.0F, 1.0F, 0.0F } );
   auto scaled_vec = scale * vec;
 
   EXPECT_FLOAT_EQ( scaled_vec.x(), 2.0F );
@@ -323,10 +324,10 @@ TEST_F( Mat3Test, ZeroAngleSkew )
   Vec3  projected{ 1.0F, 0.0F, 0.0F };
   float angle = 0.0F;
 
-  auto result = makeSkew( angle, skew_direction, projected );
+  auto result = make_skew( angle, skew_direction, projected );
   Mat3 expected{ 1.0F, 0.0F, 0.0F, 0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 1.0F };
 
-  EXPECT_TRUE( areMatricesEqual( result, expected ) );
+  EXPECT_TRUE( are_matrices_equal( result, expected ) );
 
   auto output_vec = result * Vec3{ 1.0F, 1.0F, 1.0F };
   EXPECT_FLOAT_EQ( output_vec.x(), 1.0F );
@@ -338,13 +339,13 @@ TEST_F( Mat3Test, NonZeroAngleSkew )
 {
   Vec3  skew_direction{ 0.0F, 1.0F, 0.0F };
   Vec3  projected{ 1.0F, 0.0F, 0.0F };
-  float angle = M_PI / 4;
+  float angle = pi / 4;
 
-  auto result = makeSkew( angle, skew_direction, projected );
+  auto result = make_skew( angle, skew_direction, projected );
   auto tan    = std::tan( angle );
   Mat3 expected{ 1.0F, 0.0F, 0.0F, tan, 1.0F, 0.0F, 0.0F, 0.0F, 1.0F };
 
-  EXPECT_TRUE( areMatricesEqual( result, expected ) );
+  EXPECT_TRUE( are_matrices_equal( result, expected ) );
 
   auto output_vec = result * Vec3{ 0.0F, 1.0F, 0.0F };
   EXPECT_FLOAT_EQ( output_vec.x(), 1.0F );

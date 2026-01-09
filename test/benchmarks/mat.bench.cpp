@@ -5,7 +5,7 @@
 
 using namespace linalg;
 
-static void BM_Mat3Multiply( benchmark::State& state )
+static void bm_mat3_multiply( benchmark::State& state )
 {
   Mat3 a{ 1.0F, 2.0F, 3.0F, 4.0F, 5.0F, 6.0F, 7.0F, 8.0F, 9.0F };
   Mat3 b{ 9.0F, 8.0F, 7.0F, 6.0F, 5.0F, 4.0F, 3.0F, 2.0F, 1.0F };
@@ -14,9 +14,9 @@ static void BM_Mat3Multiply( benchmark::State& state )
     benchmark::DoNotOptimize( a * b );
   }
 }
-BENCHMARK( BM_Mat3Multiply );
+BENCHMARK( bm_mat3_multiply );
 
-static void BM_Mat3Determinant( benchmark::State& state )
+static void bm_mat3_determinant( benchmark::State& state )
 {
   Mat3 a{ 1.0F, 2.0F, 3.0F, 0.0F, 4.0F, 5.0F, 1.0F, 0.0F, 6.0F };
   for ( auto _ : state )
@@ -24,9 +24,9 @@ static void BM_Mat3Determinant( benchmark::State& state )
     benchmark::DoNotOptimize( determinant( a ) );
   }
 }
-BENCHMARK( BM_Mat3Determinant );
+BENCHMARK( bm_mat3_determinant );
 
-static void BM_Mat3Inverse( benchmark::State& state )
+static void bm_mat3_inverse( benchmark::State& state )
 {
   Mat3 a{ 1.0F, 2.0F, 3.0F, 0.0F, 4.0F, 5.0F, 1.0F, 0.0F, 6.0F };
   for ( auto _ : state )
@@ -34,9 +34,9 @@ static void BM_Mat3Inverse( benchmark::State& state )
     benchmark::DoNotOptimize( inverse( a ) );
   }
 }
-BENCHMARK( BM_Mat3Inverse );
+BENCHMARK( bm_mat3_inverse );
 
-static void BM_Mat3Transpose( benchmark::State& state )
+static void bm_mat3_transpose( benchmark::State& state )
 {
   Mat3 a{ 1.0F, 2.0F, 3.0F, 4.0F, 5.0F, 6.0F, 7.0F, 8.0F, 9.0F };
   for ( auto _ : state )
@@ -44,9 +44,9 @@ static void BM_Mat3Transpose( benchmark::State& state )
     benchmark::DoNotOptimize( transpose( a ) );
   }
 }
-BENCHMARK( BM_Mat3Transpose );
+BENCHMARK( bm_mat3_transpose );
 
-static void BM_Mat3TimesVec3( benchmark::State& state )
+static void bm_mat3_times_vec3( benchmark::State& state )
 {
   Mat3 m{ 1.0F, 2.0F, 3.0F, 4.0F, 5.0F, 6.0F, 7.0F, 8.0F, 9.0F };
   Vec3 v{ 1.0F, 2.0F, 3.0F };
@@ -55,9 +55,9 @@ static void BM_Mat3TimesVec3( benchmark::State& state )
     benchmark::DoNotOptimize( m * v );
   }
 }
-BENCHMARK( BM_Mat3TimesVec3 );
+BENCHMARK( bm_mat3_times_vec3 );
 
-static void BM_Mat4Multiply( benchmark::State& state )
+static void bm_mat4_multiply( benchmark::State& state )
 {
   Mat4 a{ 1.0F, 2.0F, 3.0F, 4.0F, 5.0F, 6.0F, 7.0F, 8.0F, 9.0F, 10.0F, 11.0F, 12.0F, 13.0F, 14.0F, 15.0F, 16.0F };
   Mat4 b{ 16.0F, 15.0F, 14.0F, 13.0F, 12.0F, 11.0F, 10.0F, 9.0F, 8.0F, 7.0F, 6.0F, 5.0F, 4.0F, 3.0F, 2.0F, 1.0F };
@@ -66,9 +66,9 @@ static void BM_Mat4Multiply( benchmark::State& state )
     benchmark::DoNotOptimize( a * b );
   }
 }
-BENCHMARK( BM_Mat4Multiply );
+BENCHMARK( bm_mat4_multiply );
 
-static void BM_Mat4Inverse( benchmark::State& state )
+static void bm_mat4_inverse( benchmark::State& state )
 {
   Mat4 a{ 1.0F, 0.0F, 2.0F, 1.0F, 0.0F, 1.0F, 0.0F, 1.0F, 2.0F, 0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F };
   for ( auto _ : state )
@@ -76,9 +76,9 @@ static void BM_Mat4Inverse( benchmark::State& state )
     benchmark::DoNotOptimize( inverse( a ) );
   }
 }
-BENCHMARK( BM_Mat4Inverse );
+BENCHMARK( bm_mat4_inverse );
 
-static void BM_Mat4Transpose( benchmark::State& state )
+static void bm_mat4_transpose( benchmark::State& state )
 {
   Mat4 a{ 1.0F, 2.0F, 3.0F, 4.0F, 5.0F, 6.0F, 7.0F, 8.0F, 9.0F, 10.0F, 11.0F, 12.0F, 13.0F, 14.0F, 15.0F, 16.0F };
   for ( auto _ : state )
@@ -86,9 +86,9 @@ static void BM_Mat4Transpose( benchmark::State& state )
     benchmark::DoNotOptimize( transpose( a ) );
   }
 }
-BENCHMARK( BM_Mat4Transpose );
+BENCHMARK( bm_mat4_transpose );
 
-static void BM_Mat4TimesVec4( benchmark::State& state )
+static void bm_mat4_times_vec4( benchmark::State& state )
 {
   Mat4 m{ 1.0F, 2.0F, 3.0F, 4.0F, 5.0F, 6.0F, 7.0F, 8.0F, 9.0F, 10.0F, 11.0F, 12.0F, 13.0F, 14.0F, 15.0F, 16.0F };
   Vec4 v{ 1.0F, 2.0F, 3.0F, 4.0F };
@@ -97,9 +97,9 @@ static void BM_Mat4TimesVec4( benchmark::State& state )
     benchmark::DoNotOptimize( m * v );
   }
 }
-BENCHMARK( BM_Mat4TimesVec4 );
+BENCHMARK( bm_mat4_times_vec4 );
 
-static void BM_Transform4TimesPoint3( benchmark::State& state )
+static void bm_transform4_times_point3( benchmark::State& state )
 {
   Transform4 t{ 1.0F, 0.0F, 0.0F, 5.0F, 0.0F, 1.0F, 0.0F, 6.0F, 0.0F, 0.0F, 1.0F, 7.0F };
   Point3     p{ 1.0F, 2.0F, 3.0F };
@@ -108,9 +108,9 @@ static void BM_Transform4TimesPoint3( benchmark::State& state )
     benchmark::DoNotOptimize( t * p );
   }
 }
-BENCHMARK( BM_Transform4TimesPoint3 );
+BENCHMARK( bm_transform4_times_point3 );
 
-static void BM_Transform4TimesVec3( benchmark::State& state )
+static void bm_transform4_times_vec3( benchmark::State& state )
 {
   Transform4 t{ 1.0F, 0.0F, 0.0F, 5.0F, 0.0F, 1.0F, 0.0F, 6.0F, 0.0F, 0.0F, 1.0F, 7.0F };
   Vec3       v{ 1.0F, 2.0F, 3.0F };
@@ -119,9 +119,9 @@ static void BM_Transform4TimesVec3( benchmark::State& state )
     benchmark::DoNotOptimize( t * v );
   }
 }
-BENCHMARK( BM_Transform4TimesVec3 );
+BENCHMARK( bm_transform4_times_vec3 );
 
-static void BM_Transform4Inverse( benchmark::State& state )
+static void bm_transform4_inverse( benchmark::State& state )
 {
   Transform4 t{ 1.0F, 0.0F, 0.0F, 5.0F, 0.0F, 1.0F, 0.0F, 6.0F, 0.0F, 0.0F, 1.0F, 7.0F };
   for ( auto _ : state )
@@ -129,4 +129,4 @@ static void BM_Transform4Inverse( benchmark::State& state )
     benchmark::DoNotOptimize( inverse( t ) );
   }
 }
-BENCHMARK( BM_Transform4Inverse );
+BENCHMARK( bm_transform4_inverse );
