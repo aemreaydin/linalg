@@ -5,7 +5,7 @@ A high-performance, header-only C++23 linear algebra library designed for graphi
 ## Features
 
 - **Header-Only:** Easy to integrate, just add the `include` directory to your project.
-- **Modern C++:** Built with C++23, utilizing concepts and `constexpr` for compile-time safety and performance.
+- **Modern C++:** Built with C++23, strictly enforcing types via **Concepts** and leveraging `constexpr` for compile-time safety and performance.
 - **SIMD Optimized:** (WIP) Support for AVX2, SSE4.1, and NEON optimizations.
 - **Comprehensive Math Suite:**
   - **Vectors:** `Vec2`, `Vec3`, `Vec4` (float) and `IVec3`, `IVec4` (int).
