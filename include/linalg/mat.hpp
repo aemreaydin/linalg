@@ -3,15 +3,16 @@
 #include "vec.hpp"
 #include <array>
 #include <cassert>
+#include <concepts>
 #include <cstddef>
 
 namespace linalg {
 
 template<typename T, size_t Row, size_t Col, typename... Ts>
-concept MatConstructorT = ( ... && IsSame<T, Ts> ) && ( ( sizeof...( Ts ) == Row * Col ) );
+concept MatConstructorT = ( ... && std::same_as<T, Ts> ) && ( ( sizeof...( Ts ) == Row * Col ) );
 
 template<typename T, size_t Row, size_t Col, typename... Ts>
-concept MatConstructorVec = ( ... && IsSame<Vec<T, Row>, Ts> ) && ( ( sizeof...( Ts ) == Row ) );
+concept MatConstructorVec = ( ... && std::same_as<Vec<T, Row>, Ts> ) && ( ( sizeof...( Ts ) == Row ) );
 
 template<typename T, size_t Row, size_t Col>
   requires Arithmetic<T>
@@ -95,7 +96,7 @@ public:
   }
 
   template<typename U>
-    requires IsSame<T, U>
+    requires std::same_as<T, U>
   constexpr Mat& operator*=( U mul )
   {
     for ( size_t i = 0; i != Row; ++i )
@@ -109,7 +110,7 @@ public:
   }
 
   template<typename U>
-    requires IsSame<T, U>
+    requires std::same_as<T, U>
   constexpr Mat& operator/=( U div )
   {
     assert( div != 0.0F );

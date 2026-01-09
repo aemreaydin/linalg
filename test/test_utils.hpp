@@ -20,8 +20,7 @@ static bool areMatricesEqual(
 }
 
 template<typename T, size_t N>
-static bool areVectorsEqual(
-  const linalg::Vec<T, N>& vec1, const linalg::Vec<T, N>& vec2, float tol = linalg::EPSILON )
+static bool areVectorsEqual( const linalg::Vec<T, N>& vec1, const linalg::Vec<T, N>& vec2, float tol = linalg::EPSILON )
 {
   for ( auto i = 0; i != N; ++i )
   {

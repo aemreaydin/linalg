@@ -4,27 +4,37 @@
 #include <array>
 #include <cassert>
 #include <cmath>
+#include <concepts>
 #include <cstddef>
 #include <format>
 #include <string>
 #include <type_traits>
+#include <utility>
 
 namespace linalg {
 
 template<typename T>
 concept Arithmetic = std::is_arithmetic_v<T>;
 
-template<typename T, typename U>
-concept IsSame = std::is_same_v<T, U>;
-
 template<typename T, size_t N, typename... Ts>
-concept VecParams = ( ... && IsSame<T, Ts> ) && ( ( sizeof...( Ts ) == N ) );
+concept VecParams = ( ... && std::same_as<T, Ts> ) && ( ( sizeof...( Ts ) == N ) );
 
 template<typename T, size_t N>
   requires Arithmetic<T>
 class Vec
 {
+public:
+  using SizeType      = std::size_t;
+  using Iterator      = typename std::array<T, N>::iterator;
+  using ConstIterator = typename std::array<T, N>::const_iterator;
+
+private:
   std::array<T, N> m_data{};
+
+  template<size_t SubN, size_t... Is>
+  constexpr explicit Vec( const Vec<T, SubN>& other, T val, std::index_sequence<Is...> /*unused*/ )
+    : m_data{ other[Is]..., val }
+  {}
 
 public:
   Vec() = default;
@@ -34,10 +44,22 @@ public:
   constexpr explicit Vec( Args... args ) : m_data{ args... }
   {}
 
-  template<size_t SubN = 3, typename U>
-    requires( IsSame<T, U> )
-  constexpr Vec( const Vec<T, SubN>& vec, U value ) : m_data{ vec.x(), vec.y(), vec.z(), value }
+  template<size_t SubN, typename U>
+    requires( std::same_as<T, U> && ( SubN + 1 == N ) )
+  constexpr Vec( const Vec<T, SubN>& vec, U value ) : Vec( vec, value, std::make_index_sequence<SubN>{} )
   {}
+
+  // Iterator support
+  constexpr Iterator      begin() { return m_data.begin(); }
+  constexpr ConstIterator begin() const { return m_data.begin(); }
+  constexpr ConstIterator cbegin() const { return m_data.cbegin(); }
+  constexpr Iterator      end() { return m_data.end(); }
+  constexpr ConstIterator end() const { return m_data.end(); }
+  constexpr ConstIterator cend() const { return m_data.cend(); }
+
+  [[nodiscard]] constexpr SizeType size() const { return N; }
+  [[nodiscard]] constexpr SizeType maxSize() const { return N; }
+  [[nodiscard]] constexpr bool     empty() const { return N == 0; }
 
   constexpr T& operator[]( size_t i )
   {
@@ -78,7 +100,7 @@ public:
 
   template<typename U>
   constexpr Vec& operator+=( U val )
-    requires IsSame<T, U>
+    requires std::same_as<T, U>
   {
     for ( auto& data : m_data )
     {
@@ -89,7 +111,7 @@ public:
 
   template<typename U>
   constexpr Vec& operator-=( U val )
-    requires IsSame<T, U>
+    requires std::same_as<T, U>
   {
     for ( auto& data : m_data )
     {
@@ -100,7 +122,7 @@ public:
 
   template<typename U>
   constexpr Vec& operator*=( U val )
-    requires IsSame<T, U>
+    requires std::same_as<T, U>
   {
     for ( auto& data : m_data )
     {
@@ -111,7 +133,7 @@ public:
 
   template<typename U>
   constexpr Vec& operator/=( U val )
-    requires IsSame<T, U>
+    requires std::same_as<T, U>
   {
     assert( val != 0.0F );
     for ( auto& data : m_data )
@@ -150,7 +172,13 @@ public:
     std::string result = "Vec" + std::to_string( N ) + "(";
     for ( size_t i = 0; i < N; i++ )
     {
-      result += std::format( "{:.1f}", m_data[i] );
+      if constexpr ( std::floating_point<T> )
+      {
+        result += std::format( "{:.1f}", m_data[i] );
+      } else
+      {
+        result += std::format( "{}", m_data[i] );
+      }
       if ( i < N - 1 )
       {
         result += ", ";
@@ -160,6 +188,10 @@ public:
     return result;
   }
 };
+
+// Deduction Guide
+template<typename T, typename... Ts>
+Vec( T, Ts... ) -> Vec<T, 1 + sizeof...( Ts )>;
 
 template<typename T, size_t N>
 [[nodiscard]] constexpr Vec<T, N> operator+( const Vec<T, N>& left, const Vec<T, N>& right )

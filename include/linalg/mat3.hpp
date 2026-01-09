@@ -9,7 +9,7 @@ public:
   Mat3() = default;
 
   template<typename T>
-    requires( IsSame<T, float> )
+    requires( std::same_as<T, float> )
   constexpr Mat3( T n00, T n01, T n02, T n10, T n11, T n12, T n20, T n21, T n22 )
   {
     ( *this )( 0, 0 ) = n00;

@@ -10,7 +10,7 @@ public:
   Mat4() = default;
 
   template<typename T>
-    requires( IsSame<T, float> )
+    requires( std::same_as<T, float> )
   constexpr Mat4(
     T t00, T t01, T t02, T t03, T t10, T t11, T t12, T t13, T t20, T t21, T t22, T t23, T t30, T t31, T t32, T t33 )
   {
