@@ -11,6 +11,28 @@ namespace linalg {
 
 [[nodiscard]] constexpr float degrees( float rad ) { return rad * ( 180.0F / pi ); }
 
+template<size_t N>
+[[nodiscard]] constexpr Vec<float, N> radians( const Vec<float, N>& deg )
+{
+  Vec<float, N> result{};
+  for ( size_t i = 0; i != N; ++i )
+  {
+    result[i] = radians( deg[i] );
+  }
+  return result;
+}
+
+template<size_t N>
+[[nodiscard]] constexpr Vec<float, N> degrees( const Vec<float, N>& rad )
+{
+  Vec<float, N> result{};
+  for ( size_t i = 0; i != N; ++i )
+  {
+    result[i] = degrees( rad[i] );
+  }
+  return result;
+}
+
 [[nodiscard]] constexpr float mix( float a, float b, float t ) { return a + t * ( b - a ); }
 
 template<typename T, size_t N>

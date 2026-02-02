@@ -165,6 +165,33 @@ public:
     return *this;
   }
 
+  constexpr Vec& operator+=( const Vec& other )
+  {
+    for ( size_t i = 0; i != N; ++i )
+    {
+      m_data[i] += other.m_data[i];
+    }
+    return *this;
+  }
+
+  constexpr Vec& operator-=( const Vec& other )
+  {
+    for ( size_t i = 0; i != N; ++i )
+    {
+      m_data[i] -= other.m_data[i];
+    }
+    return *this;
+  }
+
+  constexpr Vec& operator*=( const Vec& other )
+  {
+    for ( size_t i = 0; i != N; ++i )
+    {
+      m_data[i] *= other.m_data[i];
+    }
+    return *this;
+  }
+
   template<size_t U>
   [[nodiscard]] constexpr Vec<T, U> to_sub_vec() const
     requires( U <= N )
@@ -275,6 +302,41 @@ template<typename T, size_t N>
     vec[i] = left[i] / div;
   }
   return vec;
+}
+
+template<typename T, size_t N>
+[[nodiscard]] constexpr bool operator==( const Vec<T, N>& left, const Vec<T, N>& right )
+{
+  for ( size_t i = 0; i != N; ++i )
+  {
+    if ( left[i] != right[i] )
+    {
+      return false;
+    }
+  }
+  return true;
+}
+
+template<typename T, size_t N>
+[[nodiscard]] constexpr Vec<T, N> operator*( const Vec<T, N>& left, const Vec<T, N>& right )
+{
+  Vec<T, N> result{};
+  for ( size_t i = 0; i != N; ++i )
+  {
+    result[i] = left[i] * right[i];
+  }
+  return result;
+}
+
+template<typename T, size_t N>
+[[nodiscard]] constexpr Vec<T, N> operator/( T div, const Vec<T, N>& vec )
+{
+  Vec<T, N> result{};
+  for ( size_t i = 0; i != N; ++i )
+  {
+    result[i] = div / vec[i];
+  }
+  return result;
 }
 
 template<typename T, size_t N>
