@@ -11,6 +11,8 @@ class Quaternion : public Vec4
 public:
   using Vec4::Vec;
 
+  constexpr Quaternion( const Vec4& v ) : Vec4( v ) {}
+
   [[nodiscard]] constexpr Vec3 get_vector() const { return to_sub_vec<3>(); }
 
   [[nodiscard]] constexpr Mat3 get_rotation_matrix()
