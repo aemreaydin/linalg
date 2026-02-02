@@ -105,22 +105,22 @@ TEST_F( Mat4Test, HandlesMatrixMultiplicationByMatrix )
   };
 
   auto result = test_mat1 * test_mat2;
-  EXPECT_FLOAT_EQ( result( 0, 0 ), 31 );
-  EXPECT_FLOAT_EQ( result( 1, 0 ), 37 );
-  EXPECT_FLOAT_EQ( result( 2, 0 ), 43 );
-  EXPECT_FLOAT_EQ( result( 3, 0 ), 49 );
-  EXPECT_FLOAT_EQ( result( 0, 1 ), 91 );
-  EXPECT_FLOAT_EQ( result( 1, 1 ), 107 );
-  EXPECT_FLOAT_EQ( result( 2, 1 ), 123 );
-  EXPECT_FLOAT_EQ( result( 3, 1 ), 139 );
+  EXPECT_FLOAT_EQ( result( 0, 0 ), 0 );
+  EXPECT_FLOAT_EQ( result( 0, 1 ), 88 );
   EXPECT_FLOAT_EQ( result( 0, 2 ), 60 );
+  EXPECT_FLOAT_EQ( result( 0, 3 ), 28 );
+  EXPECT_FLOAT_EQ( result( 1, 0 ), 0 );
+  EXPECT_FLOAT_EQ( result( 1, 1 ), 101 );
   EXPECT_FLOAT_EQ( result( 1, 2 ), 70 );
+  EXPECT_FLOAT_EQ( result( 1, 3 ), 31 );
+  EXPECT_FLOAT_EQ( result( 2, 0 ), 0 );
+  EXPECT_FLOAT_EQ( result( 2, 1 ), 114 );
   EXPECT_FLOAT_EQ( result( 2, 2 ), 80 );
+  EXPECT_FLOAT_EQ( result( 2, 3 ), 34 );
+  EXPECT_FLOAT_EQ( result( 3, 0 ), 0 );
+  EXPECT_FLOAT_EQ( result( 3, 1 ), 127 );
   EXPECT_FLOAT_EQ( result( 3, 2 ), 90 );
-  EXPECT_FLOAT_EQ( result( 0, 3 ), 0 );
-  EXPECT_FLOAT_EQ( result( 1, 3 ), 0 );
-  EXPECT_FLOAT_EQ( result( 2, 3 ), 0 );
-  EXPECT_FLOAT_EQ( result( 3, 3 ), 0 );
+  EXPECT_FLOAT_EQ( result( 3, 3 ), 37 );
 }
 
 TEST_F( Mat4Test, HandlesMatrixMultiplicationByVector )
@@ -133,10 +133,10 @@ TEST_F( Mat4Test, HandlesMatrixMultiplicationByVector )
   };
   Vec4 test_vec{ 1.0F, 2.0F, 3.0F, 4.0F };
   auto result = test_mat1 * test_vec;
-  EXPECT_FLOAT_EQ( result[0], 30 );
-  EXPECT_FLOAT_EQ( result[1], 80 );
-  EXPECT_FLOAT_EQ( result[2], 50 );
-  EXPECT_FLOAT_EQ( result[3], 0 );
+  EXPECT_FLOAT_EQ( result[0], 28 );
+  EXPECT_FLOAT_EQ( result[1], 31 );
+  EXPECT_FLOAT_EQ( result[2], 34 );
+  EXPECT_FLOAT_EQ( result[3], 37 );
 }
 
 TEST_F( Mat4Test, InverseOfIdentity )

@@ -106,3 +106,110 @@ TEST_F( QuaternionTest, NinetyDegreeZ )
   EXPECT_FLOAT_EQ( quat.y(), 0.0F );
   EXPECT_FLOAT_EQ( quat.z(), one_over_sqrt_two );
 }
+
+#include "linalg/mat4.hpp"
+
+TEST_F( QuaternionTest, ToMat4Identity )
+{
+  Quat q{ 0.0F, 0.0F, 0.0F, 1.0F };
+  Mat4 m = q.to_mat4();
+
+  EXPECT_TRUE( are_matrices_equal( m, Mat4::identity(), 1e-5F ) );
+}
+
+TEST_F( QuaternionTest, ToMat4RotationZ90 )
+{
+  Quat q{ 0.0F, 0.0F, one_over_sqrt_two, one_over_sqrt_two };
+  Mat4 m = q.to_mat4();
+
+  Vec4 v      = m * Vec4{ 1.0F, 0.0F, 0.0F, 1.0F };
+  Vec3 result = v.to_sub_vec<3>();
+  EXPECT_NEAR( result.x(), 0.0F, 1e-5F );
+  EXPECT_NEAR( result.y(), 1.0F, 1e-5F );
+  EXPECT_NEAR( result.z(), 0.0F, 1e-5F );
+}
+
+TEST_F( QuaternionTest, ToMat4BottomRow )
+{
+  Quat q{ 0.0F, 0.0F, one_over_sqrt_two, one_over_sqrt_two };
+  Mat4 m = q.to_mat4();
+
+  EXPECT_FLOAT_EQ( m( 3, 0 ), 0.0F );
+  EXPECT_FLOAT_EQ( m( 3, 1 ), 0.0F );
+  EXPECT_FLOAT_EQ( m( 3, 2 ), 0.0F );
+  EXPECT_FLOAT_EQ( m( 3, 3 ), 1.0F );
+  EXPECT_FLOAT_EQ( m( 0, 3 ), 0.0F );
+  EXPECT_FLOAT_EQ( m( 1, 3 ), 0.0F );
+  EXPECT_FLOAT_EQ( m( 2, 3 ), 0.0F );
+}
+
+TEST_F( QuaternionTest, SetRotationFromMat4 )
+{
+  Quat original{ 0.0F, 0.0F, one_over_sqrt_two, one_over_sqrt_two };
+  Mat4 m = original.to_mat4();
+
+  Quat recovered{};
+  recovered.set_rotation_from_mat4( m );
+
+  EXPECT_NEAR( std::abs( recovered.x() ), std::abs( original.x() ), 1e-5F );
+  EXPECT_NEAR( std::abs( recovered.y() ), std::abs( original.y() ), 1e-5F );
+  EXPECT_NEAR( std::abs( recovered.z() ), std::abs( original.z() ), 1e-5F );
+  EXPECT_NEAR( std::abs( recovered.w() ), std::abs( original.w() ), 1e-5F );
+}
+
+TEST_F( QuaternionTest, EulerAnglesIdentity )
+{
+  Quat q{ 0.0F, 0.0F, 0.0F, 1.0F };
+  Vec3 e = euler_angles( q );
+  EXPECT_NEAR( e.x(), 0.0F, 1e-5F );
+  EXPECT_NEAR( e.y(), 0.0F, 1e-5F );
+  EXPECT_NEAR( e.z(), 0.0F, 1e-5F );
+}
+
+TEST_F( QuaternionTest, EulerAnglesRoundtrip )
+{
+  Vec3 original_euler{ 0.1F, 0.2F, 0.3F };
+  Quat q         = quat_from_euler( original_euler );
+  Vec3 recovered = euler_angles( q );
+  EXPECT_NEAR( recovered.x(), original_euler.x(), 1e-5F );
+  EXPECT_NEAR( recovered.y(), original_euler.y(), 1e-5F );
+  EXPECT_NEAR( recovered.z(), original_euler.z(), 1e-5F );
+}
+
+TEST_F( QuaternionTest, QuatFromEulerIdentity )
+{
+  Quat q = quat_from_euler( Vec3{ 0.0F, 0.0F, 0.0F } );
+  EXPECT_NEAR( q.x(), 0.0F, 1e-5F );
+  EXPECT_NEAR( q.y(), 0.0F, 1e-5F );
+  EXPECT_NEAR( q.z(), 0.0F, 1e-5F );
+  EXPECT_NEAR( q.w(), 1.0F, 1e-5F );
+}
+
+TEST_F( QuaternionTest, SlerpIdentity )
+{
+  Quat a{ 0.0F, 0.0F, 0.0F, 1.0F };
+  Quat b{ 0.0F, 0.0F, one_over_sqrt_two, one_over_sqrt_two };
+
+  Quat r0 = slerp( a, b, 0.0F );
+  EXPECT_NEAR( r0.x(), a.x(), 1e-5F );
+  EXPECT_NEAR( r0.y(), a.y(), 1e-5F );
+  EXPECT_NEAR( r0.z(), a.z(), 1e-5F );
+  EXPECT_NEAR( r0.w(), a.w(), 1e-5F );
+
+  Quat r1 = slerp( a, b, 1.0F );
+  EXPECT_NEAR( r1.x(), b.x(), 1e-5F );
+  EXPECT_NEAR( r1.y(), b.y(), 1e-5F );
+  EXPECT_NEAR( r1.z(), b.z(), 1e-5F );
+  EXPECT_NEAR( r1.w(), b.w(), 1e-5F );
+}
+
+TEST_F( QuaternionTest, SlerpMidpoint )
+{
+  Quat a{ 0.0F, 0.0F, 0.0F, 1.0F };
+  Quat b{ 0.0F, 0.0F, one_over_sqrt_two, one_over_sqrt_two };
+
+  Quat  mid                 = slerp( a, b, 0.5F );
+  float expected_half_angle = pi / 8.0F;
+  EXPECT_NEAR( mid.z(), std::sin( expected_half_angle ), 1e-5F );
+  EXPECT_NEAR( mid.w(), std::cos( expected_half_angle ), 1e-5F );
+}

@@ -164,23 +164,23 @@ TEST_F( Mat3Test, HandlesMatrixSubtraction )
 TEST_F( Mat3Test, HandlesMatrixMultiplicationByMatrix )
 {
   auto result = testMat1 * testMat2;
-  ASSERT_FLOAT_EQ( result( 0, 0 ), 90.0F );
-  ASSERT_FLOAT_EQ( result( 1, 0 ), 54.0F );
-  ASSERT_FLOAT_EQ( result( 2, 0 ), 18.0F );
-  ASSERT_FLOAT_EQ( result( 0, 1 ), 114.0F );
+  ASSERT_FLOAT_EQ( result( 0, 0 ), 30.0F );
+  ASSERT_FLOAT_EQ( result( 0, 1 ), 24.0F );
+  ASSERT_FLOAT_EQ( result( 0, 2 ), 18.0F );
+  ASSERT_FLOAT_EQ( result( 1, 0 ), 84.0F );
   ASSERT_FLOAT_EQ( result( 1, 1 ), 69.0F );
-  ASSERT_FLOAT_EQ( result( 2, 1 ), 24.0F );
-  ASSERT_FLOAT_EQ( result( 0, 2 ), 138.0F );
-  ASSERT_FLOAT_EQ( result( 1, 2 ), 84.0F );
-  ASSERT_FLOAT_EQ( result( 2, 2 ), 30.0F );
+  ASSERT_FLOAT_EQ( result( 1, 2 ), 54.0F );
+  ASSERT_FLOAT_EQ( result( 2, 0 ), 138.0F );
+  ASSERT_FLOAT_EQ( result( 2, 1 ), 114.0F );
+  ASSERT_FLOAT_EQ( result( 2, 2 ), 90.0F );
 }
 
 TEST_F( Mat3Test, HandlesMatrixMultiplicationByVector )
 {
   auto result = testMat1 * testVec;
-  ASSERT_FLOAT_EQ( result[0], 30.0F );
-  ASSERT_FLOAT_EQ( result[1], 36.0F );
-  ASSERT_FLOAT_EQ( result[2], 42.0F );
+  ASSERT_FLOAT_EQ( result[0], 14.0F );
+  ASSERT_FLOAT_EQ( result[1], 32.0F );
+  ASSERT_FLOAT_EQ( result[2], 50.0F );
 
   Mat3 test_mat{
     Vec3{ 1.0F, 4.0F, 7.0F },
@@ -188,9 +188,9 @@ TEST_F( Mat3Test, HandlesMatrixMultiplicationByVector )
     Vec3{ 3.0F, 6.0F, 9.0F }
   };
   auto result2 = test_mat * testVec;
-  ASSERT_FLOAT_EQ( result2[0], 30.0F );
-  ASSERT_FLOAT_EQ( result2[1], 36.0F );
-  ASSERT_FLOAT_EQ( result2[2], 42.0F );
+  ASSERT_FLOAT_EQ( result2[0], 14.0F );
+  ASSERT_FLOAT_EQ( result2[1], 32.0F );
+  ASSERT_FLOAT_EQ( result2[2], 50.0F );
 }
 
 TEST_F( Mat3Test, Determinant )
@@ -209,9 +209,9 @@ TEST_F( Mat3Test, Inverse )
 {
   const Mat3 mat{ 1.0F, 2.0F, 3.0F, 0.0F, 1.0F, 4.0F, 5.0F, 6.0F, 0.0F };
   Mat3       expected_inverse{
-    Vec3{ -24.0F,  18.0F,  5.0F },
-    Vec3{  20.0F, -15.0F, -4.0F },
-    Vec3{  -5.0F,   4.0F,  1.0F }
+    Vec3{ -24.0F,  20.0F, -5.0F },
+    Vec3{  18.0F, -15.0F,  4.0F },
+    Vec3{   5.0F,  -4.0F,  1.0F }
   };
   Mat3 actual_inverse = inverse( mat );
   for ( int i = 0; i < 3; ++i )
@@ -347,7 +347,7 @@ TEST_F( Mat3Test, NonZeroAngleSkew )
 
   EXPECT_TRUE( are_matrices_equal( result, expected ) );
 
-  auto output_vec = result * Vec3{ 0.0F, 1.0F, 0.0F };
+  auto output_vec = result * Vec3{ 1.0F, 0.0F, 0.0F };
   EXPECT_FLOAT_EQ( output_vec.x(), 1.0F );
   EXPECT_FLOAT_EQ( output_vec.y(), tan );
   EXPECT_FLOAT_EQ( output_vec.z(), 0.0F );

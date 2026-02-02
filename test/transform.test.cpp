@@ -209,3 +209,62 @@ TEST_F( Transform4Test, ScalingTransform )
   EXPECT_FLOAT_EQ( scaled_point.y(), 3.0F );
   EXPECT_FLOAT_EQ( scaled_point.z(), 4.0F );
 }
+
+TEST_F( Transform4Test, MakeTranslation )
+{
+  Transform4 t = make_translation( Vec3{ 3.0F, 4.0F, 5.0F } );
+
+  EXPECT_FLOAT_EQ( t( 0, 0 ), 1.0F );
+  EXPECT_FLOAT_EQ( t( 1, 1 ), 1.0F );
+  EXPECT_FLOAT_EQ( t( 2, 2 ), 1.0F );
+  EXPECT_FLOAT_EQ( t( 0, 3 ), 3.0F );
+  EXPECT_FLOAT_EQ( t( 1, 3 ), 4.0F );
+  EXPECT_FLOAT_EQ( t( 2, 3 ), 5.0F );
+  EXPECT_FLOAT_EQ( t( 3, 3 ), 1.0F );
+  EXPECT_FLOAT_EQ( t( 3, 0 ), 0.0F );
+}
+
+TEST_F( Transform4Test, MakeTranslationApplyToPoint )
+{
+  Transform4 t     = make_translation( Vec3{ 1.0F, 2.0F, 3.0F } );
+  Point3     point = t * Point3{ 0.0F, 0.0F, 0.0F };
+  EXPECT_FLOAT_EQ( point.x(), 1.0F );
+  EXPECT_FLOAT_EQ( point.y(), 2.0F );
+  EXPECT_FLOAT_EQ( point.z(), 3.0F );
+}
+
+TEST_F( Transform4Test, MakeRotation4x4 )
+{
+  float      angle = linalg::pi / 2.0F;
+  Transform4 t     = make_rotation4( angle, Vec3{ 0.0F, 0.0F, 1.0F } );
+
+  Vec3 result = t * Vec3{ 1.0F, 0.0F, 0.0F };
+  EXPECT_NEAR( result.x(), 0.0F, 1e-5F );
+  EXPECT_NEAR( result.y(), 1.0F, 1e-5F );
+  EXPECT_NEAR( result.z(), 0.0F, 1e-5F );
+
+  EXPECT_FLOAT_EQ( t( 0, 3 ), 0.0F );
+  EXPECT_FLOAT_EQ( t( 1, 3 ), 0.0F );
+  EXPECT_FLOAT_EQ( t( 2, 3 ), 0.0F );
+}
+
+TEST_F( Transform4Test, MakeScaleVec3 )
+{
+  Transform4 t = make_scale( Vec3{ 2.0F, 3.0F, 4.0F } );
+
+  EXPECT_FLOAT_EQ( t( 0, 0 ), 2.0F );
+  EXPECT_FLOAT_EQ( t( 1, 1 ), 3.0F );
+  EXPECT_FLOAT_EQ( t( 2, 2 ), 4.0F );
+  EXPECT_FLOAT_EQ( t( 3, 3 ), 1.0F );
+  EXPECT_FLOAT_EQ( t( 0, 1 ), 0.0F );
+  EXPECT_FLOAT_EQ( t( 0, 3 ), 0.0F );
+}
+
+TEST_F( Transform4Test, MakeScaleApply )
+{
+  Transform4 t      = make_scale( Vec3{ 2.0F, 3.0F, 4.0F } );
+  Point3     scaled = t * Point3{ 1.0F, 1.0F, 1.0F };
+  EXPECT_FLOAT_EQ( scaled.x(), 2.0F );
+  EXPECT_FLOAT_EQ( scaled.y(), 3.0F );
+  EXPECT_FLOAT_EQ( scaled.z(), 4.0F );
+}

@@ -4,6 +4,7 @@
 #include "point.hpp"
 #include "transform.hpp"
 #include "vec.hpp"
+#include <optional>
 
 namespace linalg {
 
@@ -69,14 +70,14 @@ public:
   };
 }
 
-[[nodiscard]] constexpr std::optional<Point3> get_intersection( const Plane& plane, const Line& line )
+[[nodiscard]] inline std::optional<Point3> get_intersection( const Plane& plane, const Line& line )
 {
   float fp = dot( plane, line.point() );
   float fv = dot( plane, line.vector() );
   return std::fabs( fv ) > float_min ? std::optional{ line.point() - ( fp / fv ) * line.vector() } : std::nullopt;
 }
 
-[[nodiscard]] constexpr std::optional<Point3> get_intersection( const Plane& a, const Plane& b, const Plane& c )
+[[nodiscard]] inline std::optional<Point3> get_intersection( const Plane& a, const Plane& b, const Plane& c )
 {
   const Vec3& na = a.get_normal();
   const Vec3& nb = b.get_normal();
@@ -91,7 +92,7 @@ public:
            : std::nullopt;
 }
 
-[[nodiscard]] constexpr std::optional<Line> get_intersection( const Plane& a, const Plane& b )
+[[nodiscard]] inline std::optional<Line> get_intersection( const Plane& a, const Plane& b )
 {
   const Vec3& na = a.get_normal();
   const Vec3& nb = b.get_normal();

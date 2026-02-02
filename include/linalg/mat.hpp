@@ -151,7 +151,7 @@ template<typename T, size_t N>
     {
       for ( size_t k = 0; k != N; ++k )
       {
-        mat( j, i ) += left( k, i ) * right( j, k );
+        mat( i, j ) += left( i, k ) * right( k, j );
       }
     }
   }
@@ -166,7 +166,7 @@ template<typename T, size_t N>
   {
     for ( size_t j = 0; j != N; ++j )
     {
-      result[i] += mat( j, i ) * vec[j];
+      result[i] += mat( i, j ) * vec[j];
     }
   }
   return result;

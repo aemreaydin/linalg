@@ -1,5 +1,6 @@
 #pragma once
 
+#include "mat3.hpp"
 #include "mat4.hpp"
 #include "point.hpp"
 
@@ -116,6 +117,35 @@ public:
 [[nodiscard]] constexpr Vec3 operator*( const Vec3& normal_vec, const Transform4& t )
 {
   return transform_normal( normal_vec, t );
+}
+
+[[nodiscard]] constexpr Transform4 make_translation( const Vec3& offset )
+{
+  return Transform4{ 1.0F, 0.0F, 0.0F, offset.x(), 0.0F, 1.0F, 0.0F, offset.y(), 0.0F, 0.0F, 1.0F, offset.z() };
+}
+
+[[nodiscard]] inline Transform4 make_rotation4( float angle, const Vec3& axis )
+{
+  Mat3 rot = make_rotation( angle, axis );
+  return Transform4{
+    rot( 0, 0 ),
+    rot( 0, 1 ),
+    rot( 0, 2 ),
+    0.0F,
+    rot( 1, 0 ),
+    rot( 1, 1 ),
+    rot( 1, 2 ),
+    0.0F,
+    rot( 2, 0 ),
+    rot( 2, 1 ),
+    rot( 2, 2 ),
+    0.0F,
+  };
+}
+
+[[nodiscard]] constexpr Transform4 make_scale( const Vec3& s )
+{
+  return Transform4{ s.x(), 0.0F, 0.0F, 0.0F, 0.0F, s.y(), 0.0F, 0.0F, 0.0F, 0.0F, s.z(), 0.0F };
 }
 
 } // namespace linalg

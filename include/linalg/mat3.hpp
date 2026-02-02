@@ -52,7 +52,16 @@ public:
 
   const auto scalar_cross = dot( a_cross_b, c );
 
-  return Mat3{ b_cross_c, c_cross_a, a_cross_b } / scalar_cross;
+  return Mat3{ b_cross_c.x(),
+    b_cross_c.y(),
+    b_cross_c.z(),
+    c_cross_a.x(),
+    c_cross_a.y(),
+    c_cross_a.z(),
+    a_cross_b.x(),
+    a_cross_b.y(),
+    a_cross_b.z() }
+         / scalar_cross;
 }
 
 [[nodiscard]] inline Mat3 make_rotation_x( float t )
