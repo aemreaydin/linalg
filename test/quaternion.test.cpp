@@ -31,6 +31,27 @@ TEST_F( QuaternionTest, Constructor )
   EXPECT_FLOAT_EQ( quat_from_vec.w(), 8.0F );
 }
 
+TEST_F( QuaternionTest, ConstructFromVec4 )
+{
+  Vec4 v{ 1.0F, 2.0F, 3.0F, 4.0F };
+  Quat q( v );
+  EXPECT_FLOAT_EQ( q.x(), 1.0F );
+  EXPECT_FLOAT_EQ( q.y(), 2.0F );
+  EXPECT_FLOAT_EQ( q.z(), 3.0F );
+  EXPECT_FLOAT_EQ( q.w(), 4.0F );
+}
+
+TEST_F( QuaternionTest, ConstructFromNormalizedVec4 )
+{
+  Quat original{ 0.0F, 0.0F, one_over_sqrt_two, one_over_sqrt_two };
+  Vec4 as_vec4 = normalized( static_cast<const Vec4&>( original ) );
+  Quat recovered( as_vec4 );
+  EXPECT_NEAR( recovered.x(), original.x(), 1e-5F );
+  EXPECT_NEAR( recovered.y(), original.y(), 1e-5F );
+  EXPECT_NEAR( recovered.z(), original.z(), 1e-5F );
+  EXPECT_NEAR( recovered.w(), original.w(), 1e-5F );
+}
+
 TEST_F( QuaternionTest, NoRotation )
 {
   Vec3 v{ 1.0F, 0.0F, 0.0F };

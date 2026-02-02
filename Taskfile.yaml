@@ -14,7 +14,7 @@ tasks:
       - task: configure
         vars: { BUILD_TYPE: "{{.BUILD_TYPE}}", BENCHMARKS: "{{.BENCHMARKS}}" }
     cmds:
-      - cmake --build build/{{.BUILD_TYPE}} --target all
+      - cmake --build build/{{.BUILD_TYPE}}
 
   test:
     vars: { BUILD_TYPE: "Debug" }

@@ -124,6 +124,61 @@ TEST_F( Vec3Test, CompoundDivisionAssignmentOperator )
   EXPECT_DEATH( { result /= 0.0F; }, "" );
 }
 
+TEST_F( Vec3Test, CompoundAdditionAssignmentVec )
+{
+  Vec3 result = v1;
+  result += v2;
+  EXPECT_EQ( result.x(), 5.0F );
+  EXPECT_EQ( result.y(), 7.0F );
+  EXPECT_EQ( result.z(), 9.0F );
+}
+
+TEST_F( Vec3Test, CompoundSubtractionAssignmentVec )
+{
+  Vec3 result = v2;
+  result -= v1;
+  EXPECT_EQ( result.x(), 3.0F );
+  EXPECT_EQ( result.y(), 3.0F );
+  EXPECT_EQ( result.z(), 3.0F );
+}
+
+TEST_F( Vec3Test, CompoundMultiplicationAssignmentVec )
+{
+  Vec3 result = v1;
+  result *= v2;
+  EXPECT_EQ( result.x(), 4.0F );
+  EXPECT_EQ( result.y(), 10.0F );
+  EXPECT_EQ( result.z(), 18.0F );
+}
+
+TEST_F( Vec3Test, EqualityOperator )
+{
+  Vec3 a{ 1.0F, 2.0F, 3.0F };
+  Vec3 b{ 1.0F, 2.0F, 3.0F };
+  Vec3 c{ 1.0F, 2.0F, 4.0F };
+  EXPECT_TRUE( a == b );
+  EXPECT_FALSE( a == c );
+  EXPECT_TRUE( a != c );
+  EXPECT_FALSE( a != b );
+}
+
+TEST_F( Vec3Test, ComponentWiseMultiplication )
+{
+  Vec3 result = v1 * v2;
+  EXPECT_EQ( result.x(), 4.0F );
+  EXPECT_EQ( result.y(), 10.0F );
+  EXPECT_EQ( result.z(), 18.0F );
+}
+
+TEST_F( Vec3Test, ScalarDividedByVec )
+{
+  Vec3 v{ 2.0F, 4.0F, 5.0F };
+  Vec3 result = 20.0F / v;
+  EXPECT_EQ( result.x(), 10.0F );
+  EXPECT_EQ( result.y(), 5.0F );
+  EXPECT_EQ( result.z(), 4.0F );
+}
+
 TEST_F( Vec3Test, StringOutput ) { EXPECT_EQ( std::string( v1 ), "Vec3(1.0, 2.0, 3.0)" ); }
 
 TEST_F( Vec3Test, Magnitude )

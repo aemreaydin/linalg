@@ -49,6 +49,33 @@ TEST_F( UtilityTest, MixVec3 )
   EXPECT_FLOAT_EQ( result.z(), 15.0F );
 }
 
+TEST_F( UtilityTest, RadiansVec3 )
+{
+  Vec3 deg{ 180.0F, 90.0F, 45.0F };
+  Vec3 result = radians( deg );
+  EXPECT_FLOAT_EQ( result.x(), pi );
+  EXPECT_FLOAT_EQ( result.y(), pi / 2.0F );
+  EXPECT_FLOAT_EQ( result.z(), pi / 4.0F );
+}
+
+TEST_F( UtilityTest, DegreesVec3 )
+{
+  Vec3 rad{ pi, pi / 2.0F, pi / 4.0F };
+  Vec3 result = degrees( rad );
+  EXPECT_FLOAT_EQ( result.x(), 180.0F );
+  EXPECT_FLOAT_EQ( result.y(), 90.0F );
+  EXPECT_FLOAT_EQ( result.z(), 45.0F );
+}
+
+TEST_F( UtilityTest, RadiansDegreesVec3Roundtrip )
+{
+  Vec3 original{ 30.0F, 60.0F, 120.0F };
+  Vec3 result = degrees( radians( original ) );
+  EXPECT_FLOAT_EQ( result.x(), original.x() );
+  EXPECT_FLOAT_EQ( result.y(), original.y() );
+  EXPECT_FLOAT_EQ( result.z(), original.z() );
+}
+
 TEST_F( UtilityTest, MinVec3 )
 {
   Vec3 a{ 1.0F, 5.0F, 3.0F };
